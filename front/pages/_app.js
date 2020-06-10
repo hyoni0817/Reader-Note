@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
+import PropTypes from 'prop-types';
 import AppLayout from '../components/AppLayout';
 
 const ReaderNote = ({ Component }) => { //Component는 next에서 넣어주는 props다. 여기서 Component는 index, profile, signup 같은 것을 넣어준다.
@@ -16,4 +17,7 @@ const ReaderNote = ({ Component }) => { //Component는 next에서 넣어주는 p
     );
 };
 
+ReaderNote.propTypes = {
+    Component: PropTypes.elementType,
+}
 export default ReaderNote;
