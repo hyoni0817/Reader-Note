@@ -14,7 +14,7 @@ const LoginForm = () => {
     }, [id, password]);
 
     return (
-        <Form onSubmit={onSubmitForm}>
+        <Form onSubmit={onSubmitForm} style={{ padding: '10px' }}>
             <div>
                 <label htmlFor="user-id"></label>
                 <br />
