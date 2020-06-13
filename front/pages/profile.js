@@ -1,14 +1,12 @@
 //프로필 화면(팔로워 및 팔로잉 목록, 나의 게시글 정보)
 import React from 'react';
-import { Form, Input, Button, List, Card, Icon } from 'antd';
+import { Button, List, Card, Icon } from 'antd';
+import NicknameEditForm from '../components/NicknameEditForm';
 
 const Profile = () => {
     return (
         <div>
-            <Form style={{ marginBottom: '20px', border: '1px solid #d9d9d9', padding: '20px'}}>
-                <Input addonBefore="닉네임" />
-                <Button type="primary">수정</Button>
-            </Form>
+            <NicknameEditForm />
             <List 
                 style={{ marginBottom: '20px'}}
                 grid={{ gutter: 4, xs: 2, md: 3}}
