@@ -29,9 +29,36 @@ export const LOG_IN_REQUEST = 'LOG_IN_REQUEST'; //액션의 이름
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
 export const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
 
+//로그인 후 사용자 정보 불러오는 액션
+export const LOAD_USER_REQUEST = 'LOAD_USER_REQUEST'; //액션의 이름
+export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS';
+export const LOAD_USER_FAILURE = 'LOAD_USER_FAILURE';
+
 export const LOG_OUT_REQUEST = 'LOG_OUT_REQUEST';
 export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS';
 export const LOG_OUT_FAILURE = 'LOG_OUT_FAILURE';
+
+//팔로우 목록 불러오는 액션
+export const LOAD_FOLLOW_REQUEST = 'LOAD_FOLLOW_REQUEST'; //액션의 이름
+export const LOAD_FOLLOW_SUCCESS = 'LOAD_FOLLOW_SUCCESS';
+export const LOAD_FOLLOW_FAILURE = 'LOAD_FOLLOW_FAILURE';
+
+//팔로우하는 액션
+export const FOLLOW_USER_REQUEST = 'FOLLOW_USER_REQUEST'; //액션의 이름
+export const FOLLOW_USER_SUCCESS = 'FOLLOW_USER_SUCCESS';
+export const FOLLOW_USER_FAILURE = 'FOLLOW_USER_FAILURE';
+
+//팔로우 해제하는 액션
+export const UNFOLLOW_USER_REQUEST = 'UNFOLLOW_USER_REQUEST'; //액션의 이름
+export const UNFOLLOW_USER_SUCCESS = 'UNFOLLOW_USER_SUCCESS';
+export const UNFOLLOW_USER_FAILURE = 'UNFOLLOW_USER_FAILURE';
+
+//팔로워 차단(제거)하는 액션
+export const REMOVE_FOLLOWER_REQUEST = 'REMOVE_FOLLOWER_REQUEST'; //액션의 이름
+export const REMOVE_FOLLOWER_SUCCESS = 'REMOVE_FOLLOWER_SUCCESS';
+export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
+
+export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 
 //동기 요청에는 요청 보냈다가 기다리는 것 없이 바로 실행되는 것이 때문에 REQUEST, SUCCESS, FAILURE 같은 것이 붙지 않는다. 이런것은 리덕스 사가가 필요하지 않기 때문에 리덕스 만으로 처리 가능.
 
@@ -49,7 +76,7 @@ export const signUpSuccess = {
 export const loginAction = {
     type: LOG_IN_REQUEST,
     data: {
-        nickname: '제로초',
+        nickname: '피카츄',
     }
 };
 
