@@ -17,7 +17,7 @@ const LoginForm = () => {
     return (
         <Form onSubmit={onSubmitForm} style={{ padding: '10px' }}>
             <div>
-                <label htmlFor="user-id"></label>
+                <label htmlFor="user-id">아이디</label>
                 <br />
                 <Input name="user-id" value={id} onChange={onChangeId} required />
             </div>
