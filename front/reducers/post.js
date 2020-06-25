@@ -6,8 +6,10 @@ export const initialState = {
         },
         content: '첫 번째 게시물',
         img: 'https://cphoto.asiae.co.kr/listimglink/6/2013051007205672589_1.jpg',
-    }],
-    imagePaths: [],
+    }], //화면에 보일 포스트들
+    imagePaths: [], //미리보기 이미지 경로
+    addPostErrorReason: false, //포스트 업로드 실패 사유
+    isAddingPost: false, //포스트 업로드 중
 };
 
 const reducer = (state = initialState, action) => {
