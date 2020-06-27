@@ -13,6 +13,13 @@ export const initialState = {
     postAdded: false, //포스트 업로드 성공
 };
 
+const dummyPost = {
+    User: {
+        id: 1,
+        nickname: '둘리',
+    },
+    content: '나는 아기공룡 둘리입니다.',
+}
 
 //메인 포스트를 로딩하는 액션
 export const LOAD_MAIN_POSTS_REQUEST = 'LOAD_MAIN_POSTS_REQUEST';
