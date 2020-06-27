@@ -18,7 +18,7 @@ const dummyPost = {
         id: 1,
         nickname: '둘리',
     },
-    content: '나는 아기공룡 둘리입니다.',
+    content: '나는 더미입니다.',
 }
 
 //메인 포스트를 로딩하는 액션
@@ -80,6 +80,30 @@ export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case ADD_POST_REQUEST: {
+            return {
+                ...state, 
+                isAddingPost: true,
+                addPostErrorReason: '',
+                postAdded: false,
+            }
+        }
+        case ADD_POST_SUCCESS: {
+            return {
+                ...state, 
+                isAddingPost: false,
+                mainPosts: [dummyPost, ...state.mainPosts],
+                postAdded: true,
+            }
+        }
+        case ADD_POST_FAILURE: {
+            return {
+                ...state, 
+                isAddingPost: false,
+                addPostErrorReason: action.error,
+            }
+        }
+
         default: {
             return {
                 ...state,
