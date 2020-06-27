@@ -60,15 +60,14 @@ export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
 
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 
-//action도 자주 쓰이니 export 해준다.
-export const loginAction = {
+export const loginRequestAction = {
     type: LOG_IN_REQUEST,
     data: {
         nickname: '피카츄',
     }
 };
 
-export const logoutAction = {
+export const logoutRequestAction = {
     type: LOG_OUT_REQUEST,
 };
 
