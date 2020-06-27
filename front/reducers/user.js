@@ -107,7 +107,9 @@ const reducer = (state = initialState, action) => {
         case SIGN_UP_REQUEST: {
             return {
                 ...state,
-                signupData: action.data,
+                isSigningUp: true,
+                isSignedUp: false,
+                signUpErrorReason: '',
             };
         }
         default: {
