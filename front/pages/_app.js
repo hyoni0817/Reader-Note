@@ -27,7 +27,8 @@ ReaderNote.propTypes = {
     Component: PropTypes.elementType,
     store: PropTypes.object,
 }
-export default withRedux((initialState, options) => {
+
+const configureStore = (initialState, options) => {
     const sagaMiddlewares = createSagaMiddleware(); //saga 미들웨어를 리덕스에 연결하기
     const middlewares = [sagaMiddlewares]; // createSagaMiddleware()를 넣어주면 알아서 미들웨어 장착이 된다.
     const enhancer = process.env.NODE_ENV === 'production' ? compose(applyMiddleware(...middlewares)) : compose(applyMiddleware(...middlewares), !options.isServer && window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ?
@@ -36,4 +37,6 @@ export default withRedux((initialState, options) => {
     const store = createStore(reducer, initialState, enhancer);
     sagaMiddlewares.run(rootSaga);
     return store;
-})(ReaderNote); 
+};
+
+export default withRedux(configureStore)(ReaderNote); 
