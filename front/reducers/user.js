@@ -60,18 +60,6 @@ export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
 
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 
-//동기 요청에는 요청 보냈다가 기다리는 것 없이 바로 실행되는 것이 때문에 REQUEST, SUCCESS, FAILURE 같은 것이 붙지 않는다. 이런것은 리덕스 사가가 필요하지 않기 때문에 리덕스 만으로 처리 가능.
-
-export const signUpAction = (data) => ({
-        type: SIGN_UP_REQUEST,
-        data,
-    } //return문을 쓰지 않고 소괄호를 쓰면 바로 리턴되는 방식으로 바꾼다.
-);
-
-export const signUpSuccess = {
-    type: 'SIGN_UP_SUCCESS',
-};
-
 //action도 자주 쓰이니 export 해준다.
 export const loginAction = {
     type: LOG_IN_REQUEST,
