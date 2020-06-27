@@ -74,12 +74,15 @@ const reducer = (state = initialState, action) => {
         case LOG_IN_REQUEST: {
             return {
                 ...state,
-                isLoading: true, //REQUEST에 보통 로딩창 여부를 적어준다.
+                isLoggingIn: true,
+                //isLoading: true, //REQUEST에 보통 로딩창 여부를 적어준다.
+                logInErrorReason: '',
             }
         }
         case LOG_IN_SUCCESS: {
             return {
                 ...state,
+                isLoggingIn: false,
                 isLoading: false,
                 me: dummyUser,
                 isLoggedIn: true,
@@ -88,7 +91,9 @@ const reducer = (state = initialState, action) => {
         case LOG_IN_FAILURE: {
             return {
                 ...state,
+                isLoggingIn: false,
                 isLoggedIn: false,
+                logInErrorReason: action.error,
                 me: null,
             }
         }
