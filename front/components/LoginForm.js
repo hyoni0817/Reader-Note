@@ -3,15 +3,21 @@ import Link from 'next/link';
 import { Input, Button, Form } from 'antd';
 import { useDispatch } from 'react-redux';
 import { useInput } from '../pages/signup';
-import { loginAction } from '../reducers/user';
-
+import { LOG_IN_REQUEST } from '../reducers/user';
 const LoginForm = () => {
     const [id, onChangeId] = useInput('');
     const [password, onChangePassword] = useInput('');
     const dispatch = useDispatch();
+    
     const onSubmitForm = useCallback((e) => {
         e.preventDefault();
-        dispatch(loginAction);
+
+         dispatch({
+             type: LOG_IN_REQUEST,
+             data: {
+                 id, password,
+             }
+         })
     }, [id, password]);
 
     return (
