@@ -1,14 +1,14 @@
 import React, { useCallback } from 'react';
 import { Card, Avatar, Button } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { logoutAction } from '../reducers/user';
+import { logoutRequestAction } from '../reducers/user';
 
 const UserProfile = () => {
     const { me } = useSelector(state => state.user);
     const dispatch = useDispatch();
     
     const onLogout = useCallback(() => {
-        dispatch(logoutAction);
+        dispatch(logoutRequestAction);
     }, []); //useCallback으로 감싸는 이유는 자식 컴포넌트에 함수가 props로 전달하기 때문이다. 
     return (
         <Card
