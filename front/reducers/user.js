@@ -4,7 +4,8 @@ const dummyUser = {
     Followings: [],
     Followers: [],
     signUpData: {},
-}
+    id: 1,
+};
 
 export const initialState = { //initialState는 웹을 대표하는 모든 상태값을 갖고 있는 중앙 통제실. 그래서 initialState 설계를 잘하는 것이 중요하다.
     isLoggedIn: false, //로그인 여부
