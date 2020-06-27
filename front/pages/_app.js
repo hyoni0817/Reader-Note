@@ -24,8 +24,8 @@ const ReaderNote = ({ Component, store }) => { //Component는 next에서 넣어�
 };
 
 ReaderNote.propTypes = {
-    Component: PropTypes.elementType,
-    store: PropTypes.object,
+    Component: PropTypes.elementType.isRequired,
+    store: PropTypes.object.isRequired,
 }
 
 const configureStore = (initialState, options) => {
