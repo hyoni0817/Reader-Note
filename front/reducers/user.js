@@ -60,12 +60,10 @@ export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
 
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 
-export const loginRequestAction = {
+export const loginRequestAction = data => ({
     type: LOG_IN_REQUEST,
-    data: {
-        nickname: '피카츄',
-    }
-};
+    data,
+});
 
 export const logoutRequestAction = {
     type: LOG_OUT_REQUEST,
