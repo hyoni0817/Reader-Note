@@ -9,7 +9,7 @@ const dummyUser = {
 export const initialState = { //initialState는 웹을 대표하는 모든 상태값을 갖고 있는 중앙 통제실. 그래서 initialState 설계를 잘하는 것이 중요하다.
     isLoggedIn: false, //로그인 여부
     isLoggingOut: false, //로그아웃 시도중
-    isLogginIn: false, //로그인 시도중
+    isLoggingIn: false, //로그인 시도중
     logInErrorReason: '', //로그인 에러 사유
     signedUp: false, // 회원가입 성공
     isSigningUp: false, //회원가입 시도중
