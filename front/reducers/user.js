@@ -112,6 +112,20 @@ const reducer = (state = initialState, action) => {
                 signUpErrorReason: '',
             };
         }
+        case SIGN_UP_SUCCESS: {
+            return {
+                ...state,
+                isSigningUp: false,
+                isSignedUp: true,
+            };
+        }
+        case SIGN_UP_FAILURE: {
+            return {
+                ...state,
+                isSigningUp: false,
+                signUpErrorReason: action.error,
+            };
+        }
         default: {
             return {
                 ...state,
