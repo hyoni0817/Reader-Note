@@ -120,6 +120,36 @@ const reducer = (state = initialState, action) => {
             }
         }
 
+        case ADD_COMMENT_REQUEST: {
+            return {
+                ...state, 
+                isAddingComment: true,
+                addCommentErrorReason: '',
+                commentAdded: false,
+            }
+        }
+        case ADD_COMMENT_SUCCESS: {
+            const postIndex = state.mainPosts.findIndex(v=>v.id === action.data.postId); //여기서 action은 sagas/post.js의 addComment()를 통해 ADD_COMMNET_SUCCESS로 전달 받은 액션이다. 즉 SUCCESS의 액션이다. 
+            const post = state.mainPosts[postIndex];
+            const Comments = [...post.Comments, dummyComment];
+            const mainPosts = [...state.mainPosts];
+            mainPosts[postIndex] = {...post, Comments};
+
+            return {
+                ...state, 
+                isAddingComment: false,
+                mainPosts,
+                commentAdded: true,
+            }
+        }
+        case ADD_COMMENT_FAILURE: {
+            return {
+                ...state, 
+                isAddingComment: false,
+                addCommentErrorReason: action.error,
+            }
+        }
+
         default: {
             return {
                 ...state,
