@@ -1,16 +1,21 @@
 export const initialState = {
     mainPosts: [{
+        id: 1,
         User: {
             id: 1,
             nickname: '둘리', 
         },
         content: '첫 번째 게시물',
         img: 'https://cphoto.asiae.co.kr/listimglink/6/2013051007205672589_1.jpg',
+        Comments: [],
     }], //화면에 보일 포스트들
     imagePaths: [], //미리보기 이미지 경로
     addPostErrorReason: false, //포스트 업로드 실패 사유
     isAddingPost: false, //포스트 업로드 중
     postAdded: false, //포스트 업로드 성공
+    isAddingComment: false, 
+    addCommentErrorReason: '',
+    commentAdded: false,
 };
 
 const dummyPost = {
