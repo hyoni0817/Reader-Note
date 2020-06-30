@@ -1,18 +1,17 @@
 const express = require('express');
 
 const db = require('./models'); //index는 생략 가능함.
+const userAPIRouter = require('./routes/user');
+const postAPIRouter = require('./routes/post');
+const postsAPIRouter = require('./routes/posts');
 
 const app = express();
 db.sequelize.sync();//알아서 테이블을 생성해준다. 
 
-//메인 페이지
-app.get('/', (req, res) => {
-    res.send('Hello, server');
-});
-
-app.get('/about', (req, res) => {
-    res.send('Hello, about');
-})
+//API는 다른 서비스가 내 서비스의 기능을 실행할 수 있게 열어둔 창구
+app.use('/api/user', userAPIRouter);
+app.use('/api/post', postAPIRouter);
+app.use('/api/posts', postsAPIRouter);
 
 app.listen(3065, () => {
     console.log('server is running on localhost:3065');
