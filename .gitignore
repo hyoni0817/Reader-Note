@@ -1,3 +1,10 @@
+#front
 front/node_modules
 front/.next
+
+#back
+back/node_modules
+back/config
+
+#etc.
 comment
