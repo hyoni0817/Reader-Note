@@ -11,7 +11,7 @@ router.post('/', async (req, res, next) => { // POST /api/user 회원가입
     try {
         const exUser = await db.User.findOne({ //기존에 가입한 유저가 있는지 찾음
             where: {
-                userId: req.body.id,
+                userId: req.body.userId,
             }
         });
         if (exUser) {
