@@ -23,16 +23,14 @@ function* login() {
     }
 }
 
-function signUpAPI() {
+function signUpAPI(signUpData) { //signUpData에 id, nickname, password가 전달됨.
     //서버에 요청을 보내는 부분
-    return axios.post('/login');
+    return axios.post('http://localhost:3065/api/user/', signUpData);
 }
 
-function* signUp() {
+function* signUp(action) { 
     try {
-        //yield call(signUpAPI);
-        yield delay(2000);
-        throw new Error('에러에러');
+        yield call(signUpAPI, action.data); //첫번째(signUpAPI부분)는 함수고 두번째(action.data부분) 부터 signUpAPI의 인자다
         yield put({ //put은 dispatch와 동일, loginAPI 성공
             type: SIGN_UP_SUCCESS
         })
