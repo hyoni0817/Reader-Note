@@ -1,3 +1,4 @@
+//백엔드의 중앙 통제실
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
@@ -6,6 +7,7 @@ const expressSession = require('express-session');
 const dotenv = require('dotenv');
 const passport = require('passport');
 
+const passportConfig = require('./passport');
 const db = require('./models'); //index는 생략 가능함.
 const userAPIRouter = require('./routes/user');
 const postAPIRouter = require('./routes/post');
@@ -14,6 +16,7 @@ const postsAPIRouter = require('./routes/posts');
 dotenv.config(); //.env 파일을 불러온다
 const app = express();
 db.sequelize.sync();//알아서 테이블을 생성해준다. 
+passportConfig();
 
 app.use(morgan('dev')); //요청 들어오는 것에 대한 로그를 남기기 위해 사용
 
@@ -33,7 +36,7 @@ app.use(expressSession({
     }
 }));
 app.use(passport.initialize());
-app.user(passport.session()); 
+app.use(passport.session()); 
 
 //API는 다른 서비스가 내 서비스의 기능을 실행할 수 있게 열어둔 창구
 app.use('/api/user', userAPIRouter);
