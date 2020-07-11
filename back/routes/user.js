@@ -38,7 +38,9 @@ router.get('/:id', (req, res) => { //남의 정보 가져오는 것 ex)/api/user
 
 });
 router.post('/logout', (req, res) => {
-
+    req.logout();
+    req.session.destroy();
+    res.send('logout 성공');
 });
 
 router.post('/login', (req, res, next) => { //POST /api/user/login
