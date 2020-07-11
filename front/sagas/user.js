@@ -3,9 +3,11 @@ import { all, takeLatest, put, call, fork, take, takeEvery, delay } from 'redux-
 import axios from 'axios'; //서버에 요청을 보내주는 모듈
 import { LOG_IN_SUCCESS, LOG_IN_FAILURE, LOG_IN_REQUEST, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE } from '../reducers/user';
 
+axios.defaults.baseURL = 'http://localhost:3065/api'; 
+
 function loginAPI() {
     //서버에 요청을 보내는 부분
-    return axios.post('/login');
+    return axios.post('/user/login');
 }
 
 function* login() {
@@ -25,7 +27,7 @@ function* login() {
 
 function signUpAPI(signUpData) { //signUpData에 id, nickname, password가 전달됨.
     //서버에 요청을 보내는 부분
-    return axios.post('http://localhost:3065/api/user/', signUpData);
+    return axios.post('/user/', signUpData);
 }
 
 function* signUp(action) { 
