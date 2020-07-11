@@ -3,19 +3,19 @@ import { all, takeLatest, put, call, fork, take, takeEvery, delay } from 'redux-
 import axios from 'axios'; //서버에 요청을 보내주는 모듈
 import { LOG_IN_SUCCESS, LOG_IN_FAILURE, LOG_IN_REQUEST, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE } from '../reducers/user';
 
-axios.defaults.baseURL = 'http://localhost:3065/api'; 
+axios.defaults.baseURL = 'http://localhost:3065/api';
 
-function loginAPI() {
+function loginAPI(loginData) {
     //서버에 요청을 보내는 부분
-    return axios.post('/user/login');
+    return axios.post('/user/login', loginData);
 }
 
-function* login() {
+function* login(action) {
     try {
-        //yield call(loginAPI);
-        yield delay(2000);
+        const result = yield call(loginAPI, action.data);
         yield put({ //put은 dispatch와 동일, loginAPI 성공
-            type: LOG_IN_SUCCESS
+            type: LOG_IN_SUCCESS,
+            data: result.data,
         })
     } catch (e) { //loginAPI 실패
         console.error(e);
