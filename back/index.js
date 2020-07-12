@@ -23,7 +23,10 @@ app.use(morgan('dev')); //요청 들어오는 것에 대한 로그를 남기기 
 //req.body를 사용하기 위해 추가해야하는 아래 코드 2줄
 app.use(express.json()); //json 형식의 본문 처리
 app.use(express.urlencoded({ extended: true })); //form으로 넘어온 데이터 처리
-app.use(cors()); 
+app.use(cors({
+    origin: 'http://localhost:3000', 
+    credentials: true,
+})); 
 app.use(cookieParser(process.env.COOKIE_SECRET)); 
 app.use(expressSession({ 
     resave: false, 
@@ -32,8 +35,9 @@ app.use(expressSession({
     secret: process.env.COOKIE_SECRET, 
     cookie: {
         httpOnly: true, 
-        secure: true,
-    }
+        secure: false, 
+    }, 
+    name: 'gkfkal'
 }));
 app.use(passport.initialize());
 app.use(passport.session()); 
