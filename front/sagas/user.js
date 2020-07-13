@@ -1,7 +1,7 @@
 //user 리듀서만 담당
 import { all, takeLatest, put, call, fork, take, takeEvery, delay } from 'redux-saga/effects'
 import axios from 'axios'; //서버에 요청을 보내주는 모듈
-import { LOG_IN_SUCCESS, LOG_IN_FAILURE, LOG_IN_REQUEST, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE } from '../reducers/user';
+import { LOG_IN_SUCCESS, LOG_IN_FAILURE, LOG_IN_REQUEST, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE, LOG_OUT_SUCCESS, LOG_OUT_FAILURE, LOG_OUT_REQUEST, } from '../reducers/user';
 
 axios.defaults.baseURL = 'http://localhost:3065/api';
 
@@ -47,6 +47,31 @@ function* signUp(action) {
     }
 }
 
+function logOutAPI() { 
+    return axios.post('/user/logout', {}, { 
+        withCredentials: true, 
+    });
+}
+
+function* logOut(action) { 
+    try {
+        yield call(logOutAPI, action.data); 
+        yield put({ 
+            type: LOG_OUT_SUCCESS,
+        })
+    } catch (e) { 
+        console.error(e);
+        yield put({
+            type: LOG_OUT_FAILURE,
+            error: e
+        })
+    }
+}
+
+function* watchLogOut() {
+    yield takeEvery(LOG_OUT_REQUEST, logOut); 
+}
+
 function* watchLogIn() {
     yield takeEvery(LOG_IN_REQUEST, logIn); 
 }
@@ -60,6 +85,7 @@ function* watchSignUp() {
 export default function* userSaga() {
     yield all([
         fork(watchLogIn),
+        fork(watchLogOut),
         fork(watchSignUp),
     ])
 }
