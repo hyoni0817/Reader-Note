@@ -8,7 +8,6 @@ const dummyUser = {
 };
 
 export const initialState = { //initialState는 웹을 대표하는 모든 상태값을 갖고 있는 중앙 통제실. 그래서 initialState 설계를 잘하는 것이 중요하다.
-    isLoggedIn: false, //로그인 여부
     isLoggingOut: false, //로그아웃 시도중
     isLoggingIn: false, //로그인 시도중
     logInErrorReason: '', //로그인 에러 사유
@@ -86,14 +85,12 @@ const reducer = (state = initialState, action) => {
                 isLoggingIn: false,
                 isLoading: false,
                 me: action.data,
-                isLoggedIn: true,
             };
         }
         case LOG_IN_FAILURE: {
             return {
                 ...state,
                 isLoggingIn: false,
-                isLoggedIn: false,
                 logInErrorReason: action.error,
                 me: null,
             }
@@ -101,7 +98,6 @@ const reducer = (state = initialState, action) => {
         case LOG_OUT_REQUEST: {
             return {
                 ...state,
-                isLoggedIn: false,
                 me: null,
             }
         }
