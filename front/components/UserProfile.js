@@ -6,14 +6,13 @@ import { logoutRequestAction } from '../reducers/user';
 const UserProfile = () => {
     const { me } = useSelector(state => state.user);
     const dispatch = useDispatch();
-    
     const onLogout = useCallback(() => {
         dispatch(logoutRequestAction);
     }, []); //useCallback으로 감싸는 이유는 자식 컴포넌트에 함수가 props로 전달하기 때문이다. 
     return (
         <Card
             actions={[
-                <div key="twit">쨱쨱<br />{me.Post.length}</div>,
+                <div key="twit">쨱쨱<br />{me.Posts.length}</div>,
                 <div key="following">팔로잉<br />{me.Followings.length}</div>,
                 <div key="follower">팔로워<br />{me.Followers.length}</div>
             ]}
