@@ -8,7 +8,13 @@ const passport = require('passport');
 const router = express.Router();
 
 router.get('/', (req, res) => { //app.use('/api/user', userAPIRouter)의 /api/user와 /가 합쳐져서 /api/user/로 된다. 
-
+    if (!req.user) { 
+        return res.status(401).send('로그인이 필요합니다.');
+    }
+    console.log("req.user:",req.user);
+    const user = Object.assign({}, req.user);
+    delete user.password;
+    return res.json(req.user);
 });
 router.post('/', async (req, res, next) => { // POST /api/user 회원가입
     try {
