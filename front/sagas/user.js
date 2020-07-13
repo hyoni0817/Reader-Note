@@ -5,16 +5,16 @@ import { LOG_IN_SUCCESS, LOG_IN_FAILURE, LOG_IN_REQUEST, SIGN_UP_REQUEST, SIGN_U
 
 axios.defaults.baseURL = 'http://localhost:3065/api';
 
-function loginAPI(loginData) {
+function logInAPI(loginData) {
     //서버에 요청을 보내는 부분
     return axios.post('/user/login', loginData, { 
         withCredentials: true, 
     });
 }
 
-function* login(action) {
+function* logIn(action) {
     try {
-        const result = yield call(loginAPI, action.data);
+        const result = yield call(logInAPI, action.data);
         yield put({ //put은 dispatch와 동일, loginAPI 성공
             type: LOG_IN_SUCCESS,
             data: result.data,
@@ -47,8 +47,8 @@ function* signUp(action) {
     }
 }
 
-function* watchLogin() {
-    yield takeEvery(LOG_IN_REQUEST, login); 
+function* watchLogIn() {
+    yield takeEvery(LOG_IN_REQUEST, logIn); 
 }
 
 
@@ -59,7 +59,7 @@ function* watchSignUp() {
 
 export default function* userSaga() {
     yield all([
-        fork(watchLogin),
+        fork(watchLogIn),
         fork(watchSignUp),
     ])
 }
