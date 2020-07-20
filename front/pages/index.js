@@ -5,12 +5,14 @@ import React, { useEffect } from 'react';
 import PostCard from '../components/PostCard';
 import PostForm from '../components/PostForm';
 import { useDispatch, useSelector } from 'react-redux';
+import { LOAD_MAIN_POSTS_REQUEST } from '../reducers/post';
 //import { loginAction, logoutAction, LOG_IN, LOG_OUT } from '../reducers/user';
 
 const Home = () => {
     //const dispatch = useDispatch(); 
-    const { isLoggedIn } = useSelector(state => state.user); 
+    const { me } = useSelector(state => state.user); 
     const { mainPosts } = useSelector(state => state.post);
+
     useEffect(() => {
 
     }, []); //[]에 아무것도 넣지 않으면 componentDidMount와 같다.
@@ -18,7 +20,7 @@ const Home = () => {
     return (
         <>
             <div>
-                {isLoggedIn && <PostForm />}
+                {me && <PostForm />}
                 {mainPosts.map((c) => {
                     return (
                         <PostCard key={c} post={c} />
