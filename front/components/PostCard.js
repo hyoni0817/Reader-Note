@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Card, Icon, Button, Avatar, List, Form, Input, Comment} from 'antd';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux'; 
 import { ADD_COMMENT_REQUEST } from '../reducers/post';
@@ -51,7 +52,18 @@ const PostCard = ({ post }) => {
             <Card.Meta
                 avatar={<Avatar>{post.User.nickname}</Avatar>}
                 title={post.User.nickname}
-                description={post.content}
+                description={(
+                    <div>
+                        {post.content.split(/(#[^\s]+)/g).map((v) => {
+                            if(v.match(/#[^\s]+/)){ //쪼갠 애들이 해시태그이면 링크로 쪼개줌
+                                return (
+                                    <Link href={`/hashtag/${v.slice(1)}`} key={v}><a>{v}</a></Link>
+                                )
+                            }
+                            return v;
+                        })}
+                    </div>
+                )}
             />
         </Card>
             {commentFormOpened && (
@@ -71,8 +83,8 @@ const PostCard = ({ post }) => {
                                 <Comment
                                     autor={item.User.nickname}
                                     avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
-                                    content={item.content}
                                     datetime={item.createAt}
+                                    content={item.content}
                                 />
                             </li>
                         )}
