@@ -24,7 +24,7 @@ app.use(morgan('dev')); //요청 들어오는 것에 대한 로그를 남기기 
 app.use(express.json()); //json 형식의 본문 처리
 app.use(express.urlencoded({ extended: true })); //form으로 넘어온 데이터 처리
 app.use(cors({
-    origin: 'http://localhost:3000', 
+    origin: 'http://localhost:3060', 
     credentials: true,
 })); 
 app.use(cookieParser(process.env.COOKIE_SECRET)); 
