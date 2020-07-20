@@ -1,14 +1,5 @@
 export const initialState = {
-    mainPosts: [{
-        id: 1,
-        User: {
-            id: 1,
-            nickname: '둘리', 
-        },
-        content: '첫 번째 게시물',
-        img: 'https://cphoto.asiae.co.kr/listimglink/6/2013051007205672589_1.jpg',
-        Comments: [],
-    }], //화면에 보일 포스트들
+    mainPosts: [], //화면에 보일 포스트들
     imagePaths: [], //미리보기 이미지 경로
     addPostErrorReason: false, //포스트 업로드 실패 사유
     isAddingPost: false, //포스트 업로드 중
@@ -17,25 +8,6 @@ export const initialState = {
     addCommentErrorReason: '',
     commentAdded: false,
 };
-
-const dummyPost = {
-    id: 2,// id로 구별을 하기 때문에 id를 잘 달아줘야 한다. 
-    User: {
-        id: 1,
-        nickname: '둘리',
-    },
-    content: '나는 더미입니다.',
-    Comments: [],
-};
-
-const dummyComment = {
-    User: {
-        id: 1,
-        nickname: 2,
-    },
-    createAt: '2020-06-02',
-    content: '더미 댓글입니다.',
-}
 
 //메인 포스트를 로딩하는 액션
 export const LOAD_MAIN_POSTS_REQUEST = 'LOAD_MAIN_POSTS_REQUEST';
@@ -131,7 +103,7 @@ const reducer = (state = initialState, action) => {
         case ADD_COMMENT_SUCCESS: {
             const postIndex = state.mainPosts.findIndex(v=>v.id === action.data.postId); //여기서 action은 sagas/post.js의 addComment()를 통해 ADD_COMMNET_SUCCESS로 전달 받은 액션이다. 즉 SUCCESS의 액션이다. 
             const post = state.mainPosts[postIndex];
-            const Comments = [...post.Comments, dummyComment];
+            const Comments = [...post.Comments, action.data.comment];
             const mainPosts = [...state.mainPosts];
             mainPosts[postIndex] = {...post, Comments};
 
