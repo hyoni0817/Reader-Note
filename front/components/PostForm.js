@@ -14,10 +14,13 @@ const PostForm = () => {
 
     const onSubmit = useCallback((e)=> {
         e.preventDefault();
+        if (!text || !text.trim()) { //trim은 문자열의 양쪽 공백을 제거해주는 것.(스페이스만 쳐서 글을 작성하는 사람들을 막을 수 있다.)
+            return alert('게시글을 작성하세요.')
+        }
         dispatch({
             type: ADD_POST_REQUEST,
             data: {
-                text,
+                content: text,
             }
         })
     }, []);
