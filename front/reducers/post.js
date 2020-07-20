@@ -150,6 +150,24 @@ const reducer = (state = initialState, action) => {
             }
         }
 
+        case LOAD_MAIN_POSTS_REQUEST: {
+            return {
+                ...state, 
+                mainPosts: [],
+            }
+        }
+        case LOAD_MAIN_POSTS_SUCCESS: {
+            return {
+                ...state, 
+                mainPosts: action.data, //서버로 부터 받은 데이터
+            }
+        }
+        case LOAD_MAIN_POSTS_FAILURE: {
+            return {
+                ...state, 
+            }
+        }
+
         default: {
             return {
                 ...state,
