@@ -3,8 +3,6 @@ import { all, takeLatest, put, call, fork, take, takeEvery, delay } from 'redux-
 import axios from 'axios'; //서버에 요청을 보내주는 모듈
 import { LOG_IN_SUCCESS, LOG_IN_FAILURE, LOG_IN_REQUEST, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE, LOG_OUT_SUCCESS, LOG_OUT_FAILURE, LOG_OUT_REQUEST, LOAD_USER_SUCCESS, LOAD_USER_FAILURE, LOAD_USER_REQUEST, } from '../reducers/user';
 
-axios.defaults.baseURL = 'http://localhost:3065/api';
-
 function logInAPI(loginData) {
     //서버에 요청을 보내는 부분
     return axios.post('/user/login', loginData, { 
