@@ -1,6 +1,6 @@
 //post 리듀서만 담당
 import { all, fork, takeLatest, put, delay, call } from 'redux-saga/effects'
-import { ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILURE, LOAD_MAIN_POSTS_REQUEST, LOAD_MAIN_POSTS_SUCCESS, LOAD_MAIN_POSTS_FAILURE, LOAD_HASHTAG_POSTS_REQUEST, LOAD_HASHTAG_POSTS_SUCCESS, LOAD_HASHTAG_POSTS_FAILURE } from '../reducers/post';
+import { ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILURE, LOAD_MAIN_POSTS_REQUEST, LOAD_MAIN_POSTS_SUCCESS, LOAD_MAIN_POSTS_FAILURE, LOAD_HASHTAG_POSTS_REQUEST, LOAD_HASHTAG_POSTS_SUCCESS, LOAD_HASHTAG_POSTS_FAILURE, LOAD_USER_POSTS_REQUEST, LOAD_USER_POSTS_SUCCESS, LOAD_USER_POSTS_FAILURE } from '../reducers/post';
 import axios from 'axios';
 
 function addPostAPI(postData) {
@@ -101,8 +101,32 @@ function* loadHashtagPosts(action) {
     }
 }
 
-function* watchLoadHashtagPosts() {
+function* watchLoadHashtagPosts() { 
     yield takeLatest(LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts); 
+}
+
+function loadUserPostsAPI(id) {
+    return axios.get(`/user/${id}/posts`); 
+}
+
+function* loadUserPosts(action) { 
+    try {
+        const result = yield call(loadUserPostsAPI, action.data);
+        yield put({
+            type: LOAD_USER_POSTS_SUCCESS,
+            data: result.data, 
+        });
+    } catch (e) {
+        console.log(e)
+        yield put({
+            type: LOAD_USER_POSTS_FAILURE,
+            error: e,
+        })
+    }
+}
+
+function* watchLoadUserPosts() {
+    yield takeLatest(LOAD_USER_POSTS_REQUEST, loadUserPosts); 
 }
 
 export default function* postSaga() {
@@ -111,5 +135,6 @@ export default function* postSaga() {
         fork(watchAddPost),
         fork(watchAddComment),
         fork(watchLoadHashtagPosts),
+        fork(watchLoadUserPosts),
     ]);
 }
