@@ -122,19 +122,26 @@ const reducer = (state = initialState, action) => {
             }
         }
 
-        case LOAD_MAIN_POSTS_REQUEST: {
+        //공통된 작업을 수행한다면 아래와 같이 case를 3개 연달아서 사용할 수 있다.
+        case LOAD_MAIN_POSTS_REQUEST: 
+        case LOAD_HASHTAG_POSTS_REQUEST: 
+        case LOAD_USER_POSTS_REQUEST: {
             return {
                 ...state, 
                 mainPosts: [],
             }
         }
-        case LOAD_MAIN_POSTS_SUCCESS: {
+        case LOAD_MAIN_POSTS_SUCCESS: 
+        case LOAD_HASHTAG_POSTS_SUCCESS: 
+        case LOAD_USER_POSTS_SUCCESS: {
             return {
                 ...state, 
                 mainPosts: action.data, //서버로 부터 받은 데이터
             }
         }
-        case LOAD_MAIN_POSTS_FAILURE: {
+        case LOAD_MAIN_POSTS_FAILURE: 
+        case LOAD_HASHTAG_POSTS_FAILURE: 
+        case LOAD_USER_POSTS_FAILURE: {
             return {
                 ...state, 
             }
