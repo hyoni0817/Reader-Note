@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { Avartar, Card } from 'antd';
+import { Avatar, Card } from 'antd';
 import { LOAD_USER_POSTS_REQUEST } from '../reducers/post';
 import { LOAD_USER_REQUEST } from '../reducers/user';
 import PostCard from '../components/PostCard';
@@ -33,7 +33,7 @@ const User = ({ id }) => {
                     ]}
                 >
                     <Card.Meta 
-                        avartar={<Avartar>{userInfo.nickname[0]}</Avartar>}
+                        avatar={<Avatar>{userInfo.nickname[0]}</Avatar>}
                         title={userInfo.nickname}
                     />
                 </Card>   
