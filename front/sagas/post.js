@@ -1,6 +1,6 @@
 //post 리듀서만 담당
 import { all, fork, takeLatest, put, delay, call } from 'redux-saga/effects'
-import { ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILURE, LOAD_MAIN_POSTS_REQUEST, LOAD_MAIN_POSTS_SUCCESS, LOAD_MAIN_POSTS_FAILURE } from '../reducers/post';
+import { ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILURE, LOAD_MAIN_POSTS_REQUEST, LOAD_MAIN_POSTS_SUCCESS, LOAD_MAIN_POSTS_FAILURE, LOAD_HASHTAG_POSTS_REQUEST, LOAD_HASHTAG_POSTS_SUCCESS, LOAD_HASHTAG_POSTS_FAILURE } from '../reducers/post';
 import axios from 'axios';
 
 function addPostAPI(postData) {
@@ -81,11 +81,35 @@ function* watchLoadMainPosts() {
 
 }
 
+function loadHashtagPostsAPI(tag) {
+    return axios.get(`/hashtag/${tag}`); 
+}
+
+function* loadHashtagPosts(action) { 
+    try {
+        const result = yield call(loadHashtagPostsAPI, action.data);
+        yield put({
+            type: LOAD_HASHTAG_POSTS_SUCCESS,
+            data: result.data, 
+        });
+    } catch (e) {
+        console.log(e)
+        yield put({
+            type: LOAD_HASHTAG_POSTS_FAILURE,
+            error: e,
+        })
+    }
+}
+
+function* watchLoadHashtagPosts() {
+    yield takeLatest(LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts); 
+}
 
 export default function* postSaga() {
     yield all([
         fork(watchLoadMainPosts),
         fork(watchAddPost),
         fork(watchAddComment),
+        fork(watchLoadHashtagPosts),
     ]);
 }
