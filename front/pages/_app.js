@@ -9,7 +9,7 @@ import reducer from '../reducers';//rootReducer
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from '../sagas';
 
-const ReaderNote = ({ Component, store }) => { //Component는 next에서 넣어주는 props다. 여기서 Component는 index, profile, signup 같은 것을 넣어준다.
+const ReaderNote = ({ Component, store, pageProps }) => { 
     return(
         <Provider store={store}>
             <Head>
@@ -17,7 +17,7 @@ const ReaderNote = ({ Component, store }) => { //Component는 next에서 넣어�
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.2/antd.css" />
             </Head>
             <AppLayout>
-                <Component />
+                <Component {...pageProps}/>
             </AppLayout>
         </Provider> 
     );
@@ -26,6 +26,17 @@ const ReaderNote = ({ Component, store }) => { //Component는 next에서 넣어�
 ReaderNote.propTypes = {
     Component: PropTypes.elementType.isRequired,
     store: PropTypes.object.isRequired,
+    pageProps: PropTypes.object.isRequired,
+}
+
+ReaderNote.getInitialProps = async (context) => { 
+    console.log(context);
+    const { ctx, Component } = context;
+    let pageProps = {};
+    if (Component.getInitialProps) {
+       pageProps = await Component.getInitialProps(ctx); 
+    }
+    return { pageProps };
 }
 
 const configureStore = (initialState, options) => {
