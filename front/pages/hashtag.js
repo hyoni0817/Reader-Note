@@ -6,7 +6,7 @@ import PostCard from '../components/PostCard';
 const Hashtag = ({ tag }) => {
     console.log(tag);
     const dispatch = useDispatch();
-    const { mainPosts } = useSelector(state => state.user);
+    const { mainPosts } = useSelector(state => state.post);
     useEffect(() => {
         dispatch({
             type: LOAD_HASHTAG_POSTS_REQUEST,
