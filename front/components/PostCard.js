@@ -28,7 +28,7 @@ const PostCard = ({ post }) => {
             }
         })
     }, [me && me.id]); 
-    
+
     useEffect(() => {
         setCommentText('');
     }, [commentAdded === true])
@@ -50,7 +50,7 @@ const PostCard = ({ post }) => {
             extra={<Button>팔로우</Button>}
         >
             <Card.Meta
-                avatar={<Avatar>{post.User.nickname}</Avatar>}
+                avatar={<Link href={`/user/${post.User.id}`}><a><Avatar>{post.User.nickname}</Avatar></a></Link>}
                 title={post.User.nickname}
                 description={(
                     <div>
@@ -82,7 +82,7 @@ const PostCard = ({ post }) => {
                             <li>
                                 <Comment
                                     autor={item.User.nickname}
-                                    avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                                    avatar={<Link href={`/user/${post.User.id}`}><a><Avatar>{item.User.nickname[0]}</Avatar></a></Link>}
                                     datetime={item.createAt}
                                     content={item.content}
                                 />
