@@ -64,7 +64,7 @@ router.get('/:id', async (req, res, next) => { //남의 정보 가져오는 것 
         jsonUser.Posts = jsonUser.Posts ? jsonUser.Posts.length : 0;
         jsonUser.Followings = jsonUser.Followings ? jsonUser.Followings.length : 0;
         jsonUser.Followers = jsonUser.Followers ? jsonUser.Followers.length : 0;
-        res.json(user);
+        res.json(jsonUser);
     } catch (e) {
         console.error(e);
         next(e);
