@@ -42,7 +42,7 @@ router.post('/', async (req, res, next) => { // POST /api/user 회원가입
 });
 router.get('/:id', async (req, res, next) => { //남의 정보 가져오는 것 ex)/api/user/3(아이디가 3인 유저 정보를 가져오겠다는 의미), id 공간에 동적으로 변할 수 있는 것을 넣어준다. 
     try {
-        await db.User.findOne({
+        const user = await db.User.findOne({
             where: { id: parseInt(req.params.id, 10)},
             include: [{
                 model: db.Post,
