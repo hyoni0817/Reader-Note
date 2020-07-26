@@ -14,6 +14,12 @@ const PostCard = ({ post }) => {
 
     const onToggleComment = useCallback(() => {
         setCommentFormOpened(prev => !prev);
+        if(!commentFormOpened) { //닫혀있는 댓글창 켜기
+            dispatch({
+                type: LOAD_COMMENTS_REQUEST,
+                data: post.id,
+            })
+        }
     }, []);
 
     const onSubmitComment = useCallback((e) => {
