@@ -27,13 +27,14 @@ const PostCard = ({ post }) => {
         if(!me) {
             return alert('로그인이 필요합니다.')
         }
-        dispatch({
+        return dispatch({
             type: ADD_COMMENT_REQUEST,
             data: {
                 postId: post.id,
+                content: commentText,
             }
         })
-    }, [me && me.id]); 
+    }, [me && me.id, commentText]); 
 
     useEffect(() => {
         setCommentText('');
