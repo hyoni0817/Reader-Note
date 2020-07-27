@@ -3,7 +3,7 @@ import { Card, Icon, Button, Avatar, List, Form, Input, Comment} from 'antd';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux'; 
-import { ADD_COMMENT_REQUEST } from '../reducers/post';
+import { ADD_COMMENT_REQUEST, LOAD_COMMENTS_REQUEST  } from '../reducers/post';
 
 const PostCard = ({ post }) => {
     const [ commentFormOpened, setCommentFormOpened ] = useState(false);
