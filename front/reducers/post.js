@@ -85,6 +85,12 @@ const reducer = (state = initialState, action) => {
             }
         }
 
+        case REMOVE_IMAGE: {
+            return {
+                ...state,
+                imagePaths: state.imagePaths.filter((v, i) => i !== action.index), //필터링하고싶은 이미지(삭제하고 싶은 이미지)가 빠짐.
+            };
+        }
         case ADD_POST_REQUEST: {
             return {
                 ...state, 
