@@ -6,11 +6,13 @@ const db = require('../models');
 router.get('/', async (req, res, next) => { //GET /api/posts 
     try {   
        const posts = await db.Post.findAll({
-           include: [{
-               model: db.User,
-               attributes: ['id', 'nickname'], 
-           }],
-           order: [['createdAt', 'DESC']], 
+            include: [{
+                model: db.User,
+                attributes: ['id', 'nickname'], 
+            }, {
+                model: db.Image,
+            }],
+            order: [['createdAt', 'DESC']], 
        })
        res.json(posts);
     } catch (e) {
