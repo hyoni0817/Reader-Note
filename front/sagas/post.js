@@ -176,7 +176,7 @@ function* uploadImages(action) {
             data: result.data, 
         });
     } catch (e) {
-        console.log(e)
+        console.error(e)
         yield put({
             type: UPLOAD_IMAGES_FAILURE,
             error: e,
