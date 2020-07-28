@@ -1,7 +1,7 @@
 import React, {useCallback, useState, useEffect, useRef } from 'react';
 import { Form, Input, Button } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { ADD_POST_REQUEST, UPLOAD_IMAGES_REQUEST } from '../reducers/post';
+import { ADD_POST_REQUEST, UPLOAD_IMAGES_REQUEST, REMOVE_IMAGE } from '../reducers/post';
 
 const PostForm = () => {
     const dispatch = useDispatch();
@@ -48,6 +48,12 @@ const PostForm = () => {
         imageInput.current.click(); //<Button>을 눌렀을 떄 input이 열리는 효과를 나게 함.
     }, [imageInput.current]); //라벨을 클릭했을 때 이미지를 업로드할 수 있는 input 창이 열리게 함.
 
+    const onRemoveImage = useCallback(index => () => { 
+        dispatch({
+            type: REMOVE_IMAGE,
+            index,
+        });
+    }, []); 
     return (
         <Form style={{ margin: '10px 0 20px' }} encType="mutipart/form-data" onSubmit={onSubmit}>
                     <Input.TextArea maxLength={140} placeholder="어떤 신기한 일이 있었나요?" value={text} onChange={onChangeText} />
@@ -58,11 +64,11 @@ const PostForm = () => {
                     </div>
                     <div>
                         {/* 이미지 미리보기 */}
-                        {imagePaths.map(v => (
+                        {imagePaths.map((v, i)=> (
                             <div key={v} style={{ display: 'inline-block' }}>
                                 <img src={`http://localhost:3065/${v}`} style={{ width: '200px'}} alt={v} />
                                 <div>
-                                    <Button>제거</Button>
+                                    <Button onClick={onRemoveImage(i)}>제거</Button>
                                 </div>
                             </div>
                         ))}
