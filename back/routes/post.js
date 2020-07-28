@@ -31,7 +31,7 @@ const upload = multer({
     limits: { fileSize: 20 * 1024 * 1024 }
 });
 
-router.post('/', isLoggedIn, async (req, res, next) => { // POST /api/post
+router.post('/', isLoggedIn, upload.none(), async (req, res, next) => { // POST /api/post, 게시글 등록시 이미지는 없고 이미지 주소만 있는데 이 주소들은 텍스트이기 때문에 이미지 자체가 사용되지 않아서 upload 미들웨어는 none이 사용됨.
     try {
 
         const hashtags = req.body.content.match(/#[^\s]+/g); 
@@ -46,7 +46,17 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /api/post
             console.log(result);
             await newPost.addHashtags(result.map( r => r[0] )); 
         }
-
+        if (req.body.image) { // 이미지 주소를 여러개 올리면 image: [주소1, 주소2] 형태
+            if(Array.isArray(req.body.image)) { 
+                const images = await Promise.all(req.body.image.map((image) => { 
+                    return db.Image.create({ src : image }); //이미지 생성
+                }));
+                await newPost.addImages(images); 
+            } else { //이미지를 하나만 올리면 image: 주소1 형태
+                const image = await db.Image.create({ src: req.body.image});
+                await newPost.addImage(image); 
+            }
+        }
         const fullPost = await db.Post.findOne({ 
             where: { id: newPost.id },
             include: [{
