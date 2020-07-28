@@ -18,13 +18,16 @@ const PostForm = () => {
         if (!text || !text.trim()) { //trim은 문자열의 양쪽 공백을 제거해주는 것.(스페이스만 쳐서 글을 작성하는 사람들을 막을 수 있다.)
             return alert('게시글을 작성하세요.')
         }
+        const formData = new FormData(); 
+        imagePaths.forEach((i) => {
+            formData.append('image', i); //req.body.image
+        })
+        formData.append('content', text); //req.body.content
         dispatch({
             type: ADD_POST_REQUEST,
-            data: {
-                content: text,
-            }
+            data: formData,
         })
-    }, [text]);
+    }, [text, imagePaths]); 
 
     const onChangeText = useCallback((e) => {
         setText(e.target.value);
