@@ -1,4 +1,7 @@
 const express = require('express');
+const multer = require('multer'); //form-data는 bodypaser로 처리하기 힘들어서 multer를 사용
+const path = require('path');
+
 const db = require('../models');
 const { isLoggedIn } = require('./middleware');
 
@@ -33,8 +36,32 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /api/post
     }
 });
 
-router.post('/images', (req, res) => {
+const upload = multer({
+    //파일 업로드에 대한 설정(꼭 이미지가 아니더라도 파일이나 동영상에도 이와 같은 설정이 사용됨)
+    storage: multer.diskStorage({
+        
+        destination(req, file, done) {
+            //파일 저장 위치
+            done(null, 'uploads'); 
+        },
+        filename(req, file, done){
+            //파일명 만들기
 
+            //확장자 추출하기
+            const ext = path.extname(file.originalname); 
+
+            //확장자를 제외한 이름 추출
+            const basename = path.basename(file.originalname, ext); 
+            
+            done(null, basename + new Date().valueOf() + ext); 
+        },
+    }),
+    //파일 사이즈 제한
+    limits: { fileSize: 20 * 1024 * 1024 }
+});
+
+router.post('/images', upload.array('image'), (req, res) => { 
+    res.json(req.files.map(v => v.filename)); 
 });
 
 router.get('/:id/comments', async (req, res, next) => { //게시글의 댓글 가져오기
