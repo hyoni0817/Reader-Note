@@ -21,6 +21,9 @@ passportConfig();
 
 app.use(morgan('dev')); //요청 들어오는 것에 대한 로그를 남기기 위해 사용
 
+//static 미들웨어는 여기에 경로(ex. uploads)를 지정해주면 다른 서버에서 자유롭게 가져갈 수 있게 해주는 역할을 함.
+app.use('/', express.static('uploads')); 
+
 //req.body를 사용하기 위해 추가해야하는 아래 코드 2줄
 app.use(express.json()); //json 형식의 본문 처리
 app.use(express.urlencoded({ extended: true })); //form으로 넘어온 데이터 처리
