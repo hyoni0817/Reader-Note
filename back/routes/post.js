@@ -7,6 +7,30 @@ const { isLoggedIn } = require('./middleware');
 
 const router = express.Router();
 
+const upload = multer({
+    //파일 업로드에 대한 설정(꼭 이미지가 아니더라도 파일이나 동영상에도 이와 같은 설정이 사용됨)
+    storage: multer.diskStorage({
+        
+        destination(req, file, done) {
+            //파일 저장 위치
+            done(null, 'uploads'); 
+        },
+        filename(req, file, done){
+            //파일명 만들기
+
+            //확장자 추출하기
+            const ext = path.extname(file.originalname); 
+
+            //확장자를 제외한 이름 추출
+            const basename = path.basename(file.originalname, ext); 
+            
+            done(null, basename + new Date().valueOf() + ext); 
+        },
+    }),
+    //파일 사이즈 제한
+    limits: { fileSize: 20 * 1024 * 1024 }
+});
+
 router.post('/', isLoggedIn, async (req, res, next) => { // POST /api/post
     try {
 
@@ -34,30 +58,6 @@ router.post('/', isLoggedIn, async (req, res, next) => { // POST /api/post
         console.error(e);
         next(e);
     }
-});
-
-const upload = multer({
-    //파일 업로드에 대한 설정(꼭 이미지가 아니더라도 파일이나 동영상에도 이와 같은 설정이 사용됨)
-    storage: multer.diskStorage({
-        
-        destination(req, file, done) {
-            //파일 저장 위치
-            done(null, 'uploads'); 
-        },
-        filename(req, file, done){
-            //파일명 만들기
-
-            //확장자 추출하기
-            const ext = path.extname(file.originalname); 
-
-            //확장자를 제외한 이름 추출
-            const basename = path.basename(file.originalname, ext); 
-            
-            done(null, basename + new Date().valueOf() + ext); 
-        },
-    }),
-    //파일 사이즈 제한
-    limits: { fileSize: 20 * 1024 * 1024 }
 });
 
 router.post('/images', upload.array('image'), (req, res) => { 
