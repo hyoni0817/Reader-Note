@@ -68,6 +68,23 @@ export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+        case UPLOAD_IMAGES_REQUEST: {
+            return {
+                ...state, 
+            }
+        }
+        case UPLOAD_IMAGES_SUCCESS: {
+            return {
+                ...state, 
+                imagePaths: [...state.imagePaths, ...action.data], //이미지 미리보기 할 수 있는 경로
+            }
+        }
+        case UPLOAD_IMAGES_FAILURE: {
+            return {
+                ...state, 
+            }
+        }
+
         case ADD_POST_REQUEST: {
             return {
                 ...state, 
