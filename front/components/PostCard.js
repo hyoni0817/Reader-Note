@@ -43,11 +43,12 @@ const PostCard = ({ post }) => {
     const onChangeCommentText = useCallback((e) => {
         setCommentText(e.target.value);
     }, [])
+    //console.log(post.Images[0].src);
     return (
         <div>
         <Card
             key={+post.createdAt}
-            cover={post.img && <img alt="example" src={post.img} />}
+            cover={post.Images[0] && <img alt="example" src={`http://localhost:3065/${post.Images[0].src}`} />}
             actions={[
                 <Icon type="retweet" key="retweet" />,
                 <Icon type="heart" key="heart" />,
@@ -64,7 +65,10 @@ const PostCard = ({ post }) => {
                         {post.content.split(/(#[^\s]+)/g).map((v) => {
                             if(v.match(/#[^\s]+/)){ //쪼갠 애들이 해시태그이면 링크로 쪼개줌
                                 return (
-                                    <Link href={{ pathname: '/hashtag', query: { tag: v.slice(1) }}} as={`/hashtag/${v.slice(1)}`} key={v}><a>{v}</a></Link>
+                                    <Link 
+                                        href={{ pathname: '/hashtag', query: { tag: v.slice(1) }}} as={`/hashtag/${v.slice(1)}`} 
+                                        key={v}><a>{v}
+                                    </a></Link>
                                 )
                             }
                             return v;
