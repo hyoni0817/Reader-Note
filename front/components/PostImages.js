@@ -1,31 +1,48 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'antd';
+import ImagesZoom from './imagesZoom';
 
 const PostImages = ({ images }) => {
+    const [showImagesZoom, setShowImagesZoom] = useState(false);
+    const onZoom = useCallback(() => {
+        setShowImagesZoom(true); //이미지를 클릭하면 이미지 Zoom 컴포넌트를 보여주는 state를 true로 만든다. 
+    }, []);
+    const onClose = useCallback(() => {
+        setShowImagesZoom(false);
+    }, []);
     if(images.length === 1) {
         return (
-            <img src={`http://localhost:3065/${images[0].src}`} />
+            <>
+                <img src={`http://localhost:3065/${images[0].src}`} onClick={onZoom} />
+                {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />} {/** onClose를 props로 넘기는 이유는 켜는 것은 이미지를 클릭하면 켜지지만 끄는 것은 이미지 줌(이미지 슬라이더)에서 x를 눌렀을 때 꺼짐. 그래서 누가 동작을 소유하느냐 따라 props에 영향을 미침.(즉, 이미지를 끄는 것은 컴포넌트 내에서 하기 때문에 props를 넘겨주는 것.) */}
+            </>
         );
     }
     if (images.length === 2) {
         return (
-            <div>
-                <img src={`http://localhost:3065/${images[0].src}`} width="50%" />
-                <img src={`http://localhost:3065/${images[1].src}`} width="50%" />
-            </div>
+            <>
+                <div>
+                    <img src={`http://localhost:3065/${images[0].src}`} width="50%" onClick={onZoom} />
+                    <img src={`http://localhost:3065/${images[1].src}`} width="50%" onClick={onZoom} />
+                </div>
+                {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />}
+            </>
         );
     }
     return (
-        <div>
-            <img src={`http://localhost:3065/${images[0].src}`} width="50%" />
-            <div style={{display: 'inline-block', width: '50%', textAlign: 'center', verticalAlign:'middle'}}>
-                <Icon type="plus" />
-                <br />
-                {images.length - 1}
-                개의 사진 더보기
+        <>
+            <div>
+                <img src={`http://localhost:3065/${images[0].src}`} width="50%" onClick={onZoom} />
+                <div style={{display: 'inline-block', width: '50%', textAlign: 'center', verticalAlign:'middle'}} onClick={onZoom}>
+                    <Icon type="plus" />
+                    <br />
+                    {images.length - 1}
+                    개의 사진 더보기
+                </div>
             </div>
-        </div>
+            {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />} {/** 아마지나 더보기를 클릭하면 해당 라인의 코드가 보일 수 있게 하기. */}          
+        </>
     );
 };
 
