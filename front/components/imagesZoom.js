@@ -13,7 +13,14 @@ const ImagesZoom = ({ images, onClose }) => {
             </header>
             <div style={{height: 'calc(100% - 44px)', background: '#090909' }}>
                 <div>
-                    <Slick>
+                    <Slick
+                        initialSlide={0}
+                        afterChange={slide => setCurrentSlide(slide)}
+                        infinite={false}
+                        arrows
+                        slidesToShow={1}
+                        slidesToScroll={1}
+                    >
                         {images.map((v) => {
                             return (
                                 <div style={{ padding: 32, textAlign: 'center'}}>
