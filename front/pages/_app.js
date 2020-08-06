@@ -15,6 +15,8 @@ const ReaderNote = ({ Component, store, pageProps }) => {
             <Head>
                 <title>Reader Note</title>
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.2/antd.css" />
+                <link rel="stylesheet" type="text/css" charSet="UTF-8" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+                <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
             </Head>
             <AppLayout>
                 <Component {...pageProps}/>
