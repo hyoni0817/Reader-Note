@@ -15,7 +15,7 @@ const PostImages = ({ images }) => {
         return (
             <>
                 <img src={`http://localhost:3065/${images[0].src}`} onClick={onZoom} />
-                {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />} {/** onClose를 props로 넘기는 이유는 켜는 것은 이미지를 클릭하면 켜지지만 끄는 것은 이미지 줌(이미지 슬라이더)에서 x를 눌렀을 때 꺼짐. 그래서 누가 동작을 소유하느냐 따라 props에 영향을 미침.(즉, 이미지를 끄는 것은 컴포넌트 내에서 하기 때문에 props를 넘겨주는 것.) */}
+                {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />} 
             </>
         );
     }
