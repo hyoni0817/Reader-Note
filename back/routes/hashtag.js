@@ -14,6 +14,11 @@ router.get('/:tag', async (req, res, next) => {
                 attributes: ['id', 'nickname'],
             }, {
                 model: db.Image,
+            }, {
+                model: db.User, //게시글 좋아요 누른 사람들 목록 include 
+                through: 'Like',
+                as: 'Likers', 
+                attributes: ['id'],
             }],
         });
         res.json(posts);
