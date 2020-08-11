@@ -181,6 +181,49 @@ const reducer = (state = initialState, action) => {
                 ...state, 
             }
         }
+        case LIKE_POST_REQUEST: {
+            return {
+                ...state, 
+            }
+        }
+        case LIKE_POST_SUCCESS: {
+            const postIndex = state.mainPosts.findIndex(v => v.id === action.data.postId); //게시글 찾기
+            const post = state.mainPosts[postIndex];
+            const Likers = [{ id: action.data.userId }, ...post.Likers]; //좋아요 목록을 누른 사람들에 자신의 아이디 추가
+            const mainPosts = [...state.mainPosts];
+            mainPosts[postIndex] = {...post, Likers};
+            return {
+                ...state, 
+                mainPosts,
+            }
+        }
+        case LIKE_POST_FAILURE: {
+            return {
+                ...state, 
+            }
+        }
+
+        case UNLIKE_POST_REQUEST: {
+            return {
+                ...state, 
+            }
+        }
+        case UNLIKE_POST_SUCCESS: {
+            const postIndex = state.mainPosts.findIndex(v => v.id === action.data.postId); //게시글 찾기
+            const post = state.mainPosts[postIndex];
+            const Likers = post.Likers.filter(v => v.id !== action.data.userId); //필터링으로 좋아요 누른 아이디 목록에서 자신의 아이디를 빼는 것은 좋아요를 누르지 않은 것과 같다.
+            const mainPosts = [...state.mainPosts];
+            mainPosts[postIndex] = {...post, Likers};
+            return {
+                ...state, 
+                mainPosts,
+            }
+        }
+        case UNLIKE_POST_FAILURE: {
+            return {
+                ...state, 
+            }
+        }
 
         default: {
             return {
