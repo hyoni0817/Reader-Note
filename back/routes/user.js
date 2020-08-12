@@ -140,6 +140,11 @@ router.get('/:id/posts', async (req, res) => {
                 attributes: ['id', 'nickname'], //게시글 작성자를 불러올때는 항상 attributes로 가져온다(비밀번호를 제외시키고 가져와야하기 때문)
             }, {
                 model: db.Image,
+            }, {
+                model: db.User, //게시글 좋아요 누른 사람들 목록 include 
+                through: 'Like',
+                as: 'Likers', 
+                attributes: ['id'],
             }],
         });
         res.json(posts);
