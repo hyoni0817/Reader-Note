@@ -13,7 +13,7 @@ const PostCard = ({ post }) => {
     const { commentAdded, isAddingComment } = useSelector(state => state.post);
     const dispatch = useDispatch();
 
-    const liked = post.Likers && post.Likers.find(v => v.id === me.id);
+    const liked = me && post.Likers && post.Likers.find(v => v.id === me.id);
 
     const onToggleComment = useCallback(() => {
         setCommentFormOpened(prev => !prev);
