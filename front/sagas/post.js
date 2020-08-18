@@ -1,6 +1,6 @@
 //post 리듀서만 담당
 import { all, fork, takeLatest, put, delay, call } from 'redux-saga/effects'
-import { ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILURE, LOAD_MAIN_POSTS_REQUEST, LOAD_MAIN_POSTS_SUCCESS, LOAD_MAIN_POSTS_FAILURE, LOAD_HASHTAG_POSTS_REQUEST, LOAD_HASHTAG_POSTS_SUCCESS, LOAD_HASHTAG_POSTS_FAILURE, LOAD_USER_POSTS_REQUEST, LOAD_USER_POSTS_SUCCESS, LOAD_USER_POSTS_FAILURE, LOAD_COMMENTS_REQUEST, LOAD_COMMENTS_SUCCESS, LOAD_COMMENTS_FAILURE, UPLOAD_IMAGES_REQUEST, UPLOAD_IMAGES_SUCCESS, UPLOAD_IMAGES_FAILURE, LIKE_POST_REQUEST, LIKE_POST_SUCCESS, LIKE_POST_FAILURE, UNLIKE_POST_REQUEST, UNLIKE_POST_SUCCESS, UNLIKE_POST_FAILURE } from '../reducers/post';
+import { ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILURE, LOAD_MAIN_POSTS_REQUEST, LOAD_MAIN_POSTS_SUCCESS, LOAD_MAIN_POSTS_FAILURE, LOAD_HASHTAG_POSTS_REQUEST, LOAD_HASHTAG_POSTS_SUCCESS, LOAD_HASHTAG_POSTS_FAILURE, LOAD_USER_POSTS_REQUEST, LOAD_USER_POSTS_SUCCESS, LOAD_USER_POSTS_FAILURE, LOAD_COMMENTS_REQUEST, LOAD_COMMENTS_SUCCESS, LOAD_COMMENTS_FAILURE, UPLOAD_IMAGES_REQUEST, UPLOAD_IMAGES_SUCCESS, UPLOAD_IMAGES_FAILURE, LIKE_POST_REQUEST, LIKE_POST_SUCCESS, LIKE_POST_FAILURE, UNLIKE_POST_REQUEST, UNLIKE_POST_SUCCESS, UNLIKE_POST_FAILURE, RETWEET_REQUEST, RETWEET_SUCCESS, RETWEET_FAILURE } from '../reducers/post';
 import axios from 'axios';
 
 function addPostAPI(postData) {
@@ -246,6 +246,34 @@ function* watchUnlikePost() {
     yield takeLatest(UNLIKE_POST_REQUEST, unlikePost); 
 }
 
+function retweetAPI(postId) { 
+    return axios.post(`/post/${postId}/retweet`, {}, { //두번째 인자에 데이터가 없더라도 빈객체 꼭 넣어주기.
+        withCredentials: true, 
+    }); 
+}
+
+function* retweet(action) { 
+    try {
+        const result = yield call(retweetAPI, action.data);
+        yield put({
+            type: RETWEET_SUCCESS,
+            data: result.data, //리트윗한 게시글 데이터 전달 
+        });
+    } catch (e) {
+        console.error(e)
+        yield put({
+            type: RETWEET_FAILURE,
+            error: e,
+        })
+        //console.dir(e); //에러에 대한 데이터도 에러 객체에 들어 있다. 그래서 alert를 통해 에러 내용을 띄우려고 할 때 console.dir를 통해 에러에 대한 내용이 어느 속성에 들어있는지 확인해줘야 한다.
+        alert(e.response && e.response.data);
+    }
+}
+
+function* watchRetweet() {
+    yield takeLatest(RETWEET_REQUEST, retweet); 
+}
+
 export default function* postSaga() {
     yield all([
         fork(watchLoadMainPosts),
@@ -257,5 +285,6 @@ export default function* postSaga() {
         fork(watchUploadImages),
         fork(watchLikePost),
         fork(watchUnlikePost),
+        fork(watchRetweet),
     ]);
 }
