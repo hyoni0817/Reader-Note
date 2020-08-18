@@ -3,7 +3,7 @@ const multer = require('multer'); //form-data는 bodypaser로 처리하기 힘�
 const path = require('path');
 
 const db = require('../models');
-const { isLoggedIn } = require('./middleware');
+const { isLoggedIn, isPostExist } = require('./middleware');
 
 const router = express.Router();
 
@@ -76,12 +76,8 @@ router.post('/images', upload.array('image'), (req, res) => {
     res.json(req.files.map(v => v.filename)); 
 });
 
-router.get('/:id/comments', async (req, res, next) => { //게시글의 댓글 가져오기
+router.get('/:id/comments', isPostExist, async (req, res, next) => { //게시글의 댓글 가져오기
     try {
-        const post = await db.Post.findOne({ where: { id: req.params.id } });
-        if (!post) {
-            return res.status(404).send('포스트가 존재하지 않습니다.'); 
-        }
         const comments = await db.Comment.findAll({
             where: {
                 PostId: req.params.id,
@@ -99,13 +95,9 @@ router.get('/:id/comments', async (req, res, next) => { //게시글의 댓글 �
     }
 });
 
-router.post('/:id/comment', isLoggedIn, async (req, res, next) => { //POST ex) /api/post/3/comment
+router.post('/:id/comment', isLoggedIn, isPostExist, async (req, res, next) => { //POST ex) /api/post/3/comment
     try {
-        const post = await db.Post.findOne({ where: { id: req.params.id } });
-        if (!post) {
-            return res.status(404).send('포스트가 존재하지 않습니다.'); 
-        }
-
+        const post = res.locals.post;
         const newComment = await db.Comment.create({
             PostId: post.id,
             UserId: req.user.id,
@@ -128,12 +120,9 @@ router.post('/:id/comment', isLoggedIn, async (req, res, next) => { //POST ex) /
     }
 });
 
-router.post('/:id/like', isLoggedIn, async(req, res, next) => {
+router.post('/:id/like', isLoggedIn, isPostExist, async(req, res, next) => {
     try {
-        const post = await db.Post.findOne({ where: { id: req.params.id }});
-        if (!post) {
-            return res.status(404).send('포스트가 존재하지 않습니다.');
-        }
+        const post = res.locals.post;
         await post.addLiker(req.user.id); //시퀄라이즈의 associate를 보고 add, get, set를 시퀄라이즈가 알아서 추가해줌.
         res.json({ userId: req.user.id});
     } catch (e) {
@@ -142,12 +131,9 @@ router.post('/:id/like', isLoggedIn, async(req, res, next) => {
     }
 });
 
-router.delete('/:id/like', isLoggedIn, async (req, res, next) => {
+router.delete('/:id/like', isLoggedIn, isPostExist, async (req, res, next) => {
     try {
-        const post = await db.Post.findOne({ where: { id: req.params.id }}) 
-        if (!post) {
-            return res.status(404).send('포스트가 존재하지 않습니다.');
-        }
+        const post = res.locals.post;
         await post.removeLiker(req.user.id);
         res.json({ userId: req.user.id});
     } catch (e) {
@@ -156,13 +142,9 @@ router.delete('/:id/like', isLoggedIn, async (req, res, next) => {
     }
 });
 
-router.post('/:id/retweet', isLoggedIn, async (req, res, next) => {
+router.post('/:id/retweet', isLoggedIn, isPostExist, async (req, res, next) => {
     try {
-        const post = await db.Post.findOne({ where: { id: req.params.id }});
-        if(!post) {
-            return res.status(404).send('포스트가 존재하지 않습니다.');
-        }
-
+        const post = res.locals.post;
         if (req.user.id === post.UserId) {
             return res.status(403).send('자신의 글은 리트윗할 수 없습니다.');
         }
