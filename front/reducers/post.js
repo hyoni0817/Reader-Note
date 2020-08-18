@@ -57,9 +57,9 @@ export const LOAD_COMMENTS_SUCCESS = 'LOAD_COMMENTS_SUCCESS';
 export const LOAD_COMMENTS_FAILURE = 'LOAD_COMMENTS_FAILURE';
 
 //리트윗 같은 기능을 담당하는 액션
-export const REPOST_REQUEST = 'REPOST_REQUEST';
-export const REPOST_SUCCESS = 'REPOST_SUCCESS';
-export const REPOST_FAILURE = 'REPOST_FAILURE';
+export const RETWEET_REQUEST = 'RETWEET_REQUEST';
+export const RETWEET_SUCCESS = 'RETWEET_SUCCESS';
+export const RETWEET_FAILURE = 'RETWEET_FAILURE';
 
 //포스트 지우는 액션
 export const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
@@ -220,6 +220,24 @@ const reducer = (state = initialState, action) => {
             }
         }
         case UNLIKE_POST_FAILURE: {
+            return {
+                ...state, 
+            }
+        }
+
+        case RETWEET_REQUEST: {
+            return {
+                ...state, 
+            }
+        }
+        case RETWEET_SUCCESS: {
+            //retweetWithPrevPost가 action.data에 값이 들어가져 있다.
+            return {
+                ...state, 
+                mainPosts: [action.data, ...state.mainPosts], //기존 게시글(state.mainPosts) 앞에 받아온 게시글(actio.data) 포함만 시켜주면 됨.
+            }
+        }
+        case RETWEET_FAILURE: {
             return {
                 ...state, 
             }
