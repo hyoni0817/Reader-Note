@@ -53,6 +53,7 @@ function* addComment(action) { //이 액션은 PostCard.js의 ADD_COMMENT_REQUES
             type: ADD_COMMENT_FAILURE,
             error: e,
         })
+        alert(e.response && e.response.data);
     }
 }
 
@@ -80,6 +81,7 @@ function* loadComments(action) {
             type: LOAD_COMMENTS_FAILURE,
             error: e,
         })
+        alert(e.response && e.response.data);
     }
 }
 
@@ -210,6 +212,7 @@ function* likePost(action) {
             type: LIKE_POST_FAILURE,
             error: e,
         })
+        alert(e.response && e.response.data);
     }
 }
 
@@ -239,6 +242,7 @@ function* unlikePost(action) {
             type: UNLIKE_POST_FAILURE,
             error: e,
         })
+        alert(e.response && e.response.data);
     }
 }
 
