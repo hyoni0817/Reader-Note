@@ -144,8 +144,16 @@ router.delete('/:id/like', isLoggedIn, isPostExist, async (req, res, next) => {
 
 router.post('/:id/retweet', isLoggedIn, isPostExist, async (req, res, next) => {
     try {
-        const post = res.locals.post;
-        if (req.user.id === post.UserId) {
+        const post = await db.Post.findOne({
+            where: { id: req.params.id },
+            include: [{
+                model: db.Post,
+                as: 'Retweet',
+            }],
+        });
+        if (req.user.id === post.UserId || (post.Retweet && post.Retweet.UserId === req.user.id)) {
+            //(post.Retweet && post.Retweet.UserId === req.user.id) 추가 이유
+            //남이 이미 리트윗한 것에 대한 것도 검사를 해줘야 내 게시글을 다시 리트윗하지않게 됨.
             return res.status(403).send('자신의 글은 리트윗할 수 없습니다.');
         }
         
