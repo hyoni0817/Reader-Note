@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux'; 
 import { ADD_COMMENT_REQUEST, LOAD_COMMENTS_REQUEST, UNLIKE_POST_REQUEST, LIKE_POST_REQUEST, RETWEET_REQUEST  } from '../reducers/post';
 import PostImages from './PostImages';
+import PostCardContent from './PostCardContent';
 
 const PostCard = ({ post }) => {
     const [ commentFormOpened, setCommentFormOpened ] = useState(false);
@@ -77,7 +78,7 @@ const PostCard = ({ post }) => {
             data: post.id,
         })
     }, [me && me.id, post && post.id]);
-
+    console.log("post.Retweet.Images[0]:",post.Retweet);
     return (
         <div>
         <Card
@@ -89,27 +90,36 @@ const PostCard = ({ post }) => {
                 <Icon type="message" key="message" onClick={onToggleComment} />,
                 <Icon type="ellipsis" key="ellipsis" />,
             ]}
+            title={post.RetweetId ? `${post.User.nickname}님이 리트윗하셨습니다.` : null}
             extra={<Button>팔로우</Button>}
         >
-            <Card.Meta
-                avatar={<Link href={{ pathname: '/user', query: {id: post.User.id}}} as={`/user/${post.User.id}`}><a><Avatar>{post.User.nickname[0]}</Avatar></a></Link>}
-                title={post.User.nickname}
-                description={(
-                    <div>
-                        {post.content.split(/(#[^\s]+)/g).map((v) => {
-                            if(v.match(/#[^\s]+/)){ //쪼갠 애들이 해시태그이면 링크로 쪼개줌
-                                return (
-                                    <Link 
-                                        href={{ pathname: '/hashtag', query: { tag: v.slice(1) }}} as={`/hashtag/${v.slice(1)}`} 
-                                        key={v}><a>{v}
-                                    </a></Link>
-                                )
-                            }
-                            return v;
-                        })}
-                    </div>
-                )}
-            />
+            {/* 리트윗을 한 게시물인지 아닌지를 구별하여 postCard를 보여줌 그리고 구별을 하면서 중복되던 코드는 PostCardContent 컴포넌트로 분리시켜서 중복을 제거해줌.  */}
+            {/* 리트윗 객체안에 리트윗한 내용이 들어 있음. */}
+            {post.RetweetId && post.Retweet ?
+                (
+                //리트윗한 경우
+                <Card
+                    cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />} //리트윗한 게시글에서 원본 게시글을 보여줘야 하기 때문에 post.Retweet 사용
+                >
+                    <Card.Meta
+                        avatar={(
+                            <Link href={{ pathname: '/user', query: {id: post.Retweet.User.id}}} as={`/user/${post.Retweet.User.id}`}>
+                                <a><Avatar>{post.Retweet.User.nickname[0]}</Avatar></a>
+                            </Link>
+                        )}
+                        title={post.Retweet.User.nickname}
+                        description={<PostCardContent postData={post.Retweet.content} />}
+                    />  
+                </Card>
+                )
+                : (
+                //리트윗안 한 경우
+                <Card.Meta
+                    avatar={<Link href={{ pathname: '/user', query: {id: post.User.id}}} as={`/user/${post.User.id}`}><a><Avatar>{post.User.nickname[0]}</Avatar></a></Link>}
+                    title={post.User.nickname}
+                    description={<PostCardContent postData={post.content} />}
+                />  
+            )}
         </Card>
             {commentFormOpened && (
                 <>
