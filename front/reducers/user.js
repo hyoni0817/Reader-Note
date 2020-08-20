@@ -152,6 +152,44 @@ const reducer = (state = initialState, action) => {
                 ...state,
             };
         }
+        case FOLLOW_USER_REQUEST: {
+            return {
+                ...state,
+            };
+        }
+        case FOLLOW_USER_SUCCESS: {
+            return {
+                ...state,
+                me: {
+                    ...state.me,
+                    Followings: [{ id: action.data }, ...state.me.Followings], //state.me.Folloings는 id들 목록인데 여기에 방금 팔로우한 사람의 id 추가해주는 것.
+                },
+            };
+        }
+        case FOLLOW_USER_FAILURE: {
+            return {
+                ...state,
+            };
+        }
+        case UNFOLLOW_USER_REQUEST: {
+            return {
+                ...state,
+            };
+        }
+        case UNFOLLOW_USER_SUCCESS: {
+            return {
+                ...state,
+                me: {
+                    ...state.me,
+                    Followings: state.me.Followings.filter(v => v.id !== action.data), // 팔로우 취소시에는 필터링하여 팔로잉 목록에서 제거
+                },
+            }
+        }
+        case UNFOLLOW_USER_FAILURE: {
+            return {
+                ...state,
+            };
+        }
         default: {
             return {
                 ...state,
