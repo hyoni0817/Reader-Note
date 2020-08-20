@@ -3,7 +3,8 @@ import { Card, Icon, Button, Avatar, List, Form, Input, Comment} from 'antd';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux'; 
-import { ADD_COMMENT_REQUEST, LOAD_COMMENTS_REQUEST, UNLIKE_POST_REQUEST, LIKE_POST_REQUEST, RETWEET_REQUEST  } from '../reducers/post';
+import { ADD_COMMENT_REQUEST, LOAD_COMMENTS_REQUEST, UNLIKE_POST_REQUEST, LIKE_POST_REQUEST, RETWEET_REQUEST, } from '../reducers/post';
+import { FOLLOW_USER_REQUEST, UNFOLLOW_USER_REQUEST } from '../reducers/user';
 import PostImages from './PostImages';
 import PostCardContent from './PostCardContent';
 
@@ -78,7 +79,20 @@ const PostCard = ({ post }) => {
             data: post.id,
         })
     }, [me && me.id, post && post.id]);
-    console.log("post.Retweet.Images[0]:",post.Retweet);
+
+    const onFollow = useCallback(userId => () => {
+        dispatch({
+            type: FOLLOW_USER_REQUEST,
+            data: userId,
+        })
+    }, []);
+
+    const onUnfollow = useCallback(userId => () => {
+        dispatch({
+            type: UNFOLLOW_USER_REQUEST,
+            data: userId,
+        })
+    }, []);
     return (
         <div>
         <Card
@@ -91,7 +105,13 @@ const PostCard = ({ post }) => {
                 <Icon type="ellipsis" key="ellipsis" />,
             ]}
             title={post.RetweetId ? `${post.User.nickname}님이 리트윗하셨습니다.` : null}
-            extra={<Button>팔로우</Button>}
+            extra={
+                !me || post.User.id === me.id //로그인 안했을 때, 자신의 게시글일 때 follow, unfollow 버튼 안뜸
+                ? null
+                : me.Followings && me.Followings.find(v => v.id === post.User.id) //내 팔로잉 목록에 작성자의 id가 존재한다면 팔로우 취소버튼 필요
+                    ? <Button onClick={onUnfollow(post.User.id)}>언팔로우</Button>
+                    : <Button onClick={onFollow(post.User.id)}>팔로우</Button>
+            }
         >
             {/* 리트윗을 한 게시물인지 아닌지를 구별하여 postCard를 보여줌 그리고 구별을 하면서 중복되던 코드는 PostCardContent 컴포넌트로 분리시켜서 중복을 제거해줌.  */}
             {/* 리트윗 객체안에 리트윗한 내용이 들어 있음. */}
