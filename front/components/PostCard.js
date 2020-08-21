@@ -97,7 +97,7 @@ const PostCard = ({ post }) => {
         <div>
         <Card
             key={+post.createdAt}
-            cover={post.Images[0] && <PostImages images={post.Images} />}
+            cover={post.Images && post.Images[0] && <PostImages images={post.Images} />}
             actions={[
                 <Icon type="retweet" key="retweet" onClick={onRetweet}/>,
                 <Icon type="heart" key="heart" theme={ liked ? 'twoTone' : 'outlined'} twoToneColor="#eb2f96" onClick={onToggleLike} />,
