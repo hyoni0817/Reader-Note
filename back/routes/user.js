@@ -114,8 +114,48 @@ router.post('/login', (req, res, next) => { //POST /api/user/login
     })(req, res, next);
 
 });
-router.get('/:id/follow', (req, res) => {
 
+router.get('/:id/followings', isLoggedIn, async (req, res, next) => { // /api/user/:id/followings 내가 팔로잉하고 있는 사람들
+    try {
+        const user = await db.User.findOne({
+            where: { id: parseInt(req.params.id, 10) },
+        });
+        const followings = await user.getFollowings({ //시퀄라이즈에 옵션을 줄 수 있다.
+            attributes: ['id', 'nickname'] //비밀번호를 가져오지 않게 하기 위해서 속성을 따로 선택해서 가져온다.
+        });
+        res.json(followings);
+    } catch (e) {
+        console.error(e);
+        next(e);
+    }
+});
+
+router.get('/:id/followers', isLoggedIn, async (req, res, next) => { // /api/user/:id/followers 나를 팔로워하고 있는 사람들
+    try {
+        const user = await db.User.findOne({
+            where: { id: parseInt(req.params.id, 10) },
+        });
+        const followers = await user.getFollowers({ //시퀄라이즈에 옵션을 줄 수 있다.
+            attributes: ['id', 'nickname'] //비밀번호를 가져오지 않게 하기 위해서 속성을 따로 선택해서 가져온다.
+        });
+        res.json(followers);
+    } catch (e) {
+        console.error(e);
+        next(e);
+    }
+});
+
+router.delete('/:id/follower', isLoggedIn, async (req, res, next) => {
+    try {
+        const me = await db.User.findOne({ //'나'가 아닌 대상 사용자를 찾음.
+            where: { id: req.user.id },
+        });
+        await me.removeFollower(req.params.id); //'나'와 대상(req.params.id)의 경계를 끊는 것.
+        res.send(req.params.id);
+    } catch (e) {
+        console.error(e);
+        next(e);
+    }
 });
 
 router.post('/:id/follow', isLoggedIn, async (req, res, next) => {
@@ -142,10 +182,6 @@ router.delete('/:id/follow', isLoggedIn, async (req, res, next) => {
         console.error(e);
         next(e);
     }
-});
-
-router.delete('/:id/follower', (req, res) => {
-
 });
 
 //app.get(...) 과 같은 이부분은 router이고 (req, res) => {...}은 controller라고 한다. 
