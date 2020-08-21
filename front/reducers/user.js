@@ -188,7 +188,8 @@ const reducer = (state = initialState, action) => {
                     ...state.me,
                     Followings: state.me.Followings.filter(v => v.id !== action.data), // 팔로우 취소시에는 필터링하여 팔로잉 목록에서 제거
                 },
-            }
+                followingList: state.followingList.filter(v => v.id !== action.data),
+            };
         }
         case UNFOLLOW_USER_FAILURE: {
             return {
