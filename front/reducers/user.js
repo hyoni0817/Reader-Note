@@ -204,6 +204,58 @@ const reducer = (state = initialState, action) => {
                 }
             }
         }
+        case LOAD_FOLLOWERS_REQUEST: {
+            return {
+                ...state,
+            };
+        }
+        case LOAD_FOLLOWERS_SUCCESS: {
+            return {
+                ...state,
+                followerList: action.data,
+            }
+        }
+        case LOAD_FOLLOWERS_FAILURE: {
+            return {
+                ...state,
+            };
+        }
+        case LOAD_FOLLOWINGS_REQUEST: {
+            return {
+                ...state,
+            };
+        }
+        case LOAD_FOLLOWINGS_SUCCESS: {
+            return {
+                ...state,
+                followingList: action.data,
+            }
+        }
+        case LOAD_FOLLOWINGS_FAILURE: {
+            return {
+                ...state,
+            };
+        }
+        case REMOVE_FOLLOWER_REQUEST: {
+            return {
+                ...state,
+            };
+        }
+        case REMOVE_FOLLOWER_SUCCESS: {
+            return {
+                ...state,
+                me: {
+                    ...state.me,
+                    Followers: state.me.Followers.filter(v => v.id !== action.data), // 팔로우 취소시에는 필터링하여 팔로잉 목록에서 제거
+                },
+                followerList: state.followerList.filter(v => v.id !== action.data),
+            }
+        }
+        case REMOVE_FOLLOWER_FAILURE: {
+            return {
+                ...state,
+            };
+        }
         default: {
             return {
                 ...state,
