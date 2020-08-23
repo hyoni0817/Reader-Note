@@ -18,6 +18,8 @@ export const initialState = { //initialState는 웹을 대표하는 모든 상�
     followingList: [], //팔로잉 리스트
     followerList: [], //팔로워 리스트
     userInfo: null, //남의 정보
+    isEditingNickname: false, //이름 변경 중
+    editNicknameErrorReason: '', //이름 변경 실패 사유
 }; 
 
 //비동기 요청은 뒤에 REQUEST, SUCCESS, FAILURE를 붙인다. 그러면 Redux-saga에서 동작하는 것인 것을 알 수 있어서 redux에서 동작하는 것과 구별이 가능하다. 그리고 비동기는 무조건 액션이 최소 3개나온다. 
@@ -62,6 +64,10 @@ export const UNFOLLOW_USER_FAILURE = 'UNFOLLOW_USER_FAILURE';
 export const REMOVE_FOLLOWER_REQUEST = 'REMOVE_FOLLOWER_REQUEST'; //액션의 이름
 export const REMOVE_FOLLOWER_SUCCESS = 'REMOVE_FOLLOWER_SUCCESS';
 export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
+
+export const EDIT_NICKNAME_REQUEST = 'EDIT_NICKNAME_REQUEST'; //액션의 이름
+export const EDIT_NICKNAME_SUCCESS = 'EDIT_NICKNAME_SUCCESS';
+export const EDIT_NICKNAME_FAILURE = 'EDIT_NICKNAME_FAILURE';
 
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 
@@ -253,6 +259,29 @@ const reducer = (state = initialState, action) => {
             }
         }
         case REMOVE_FOLLOWER_FAILURE: {
+            return {
+                ...state,
+            };
+        }
+        case EDIT_NICKNAME_REQUEST: {
+            return {
+                ...state,
+                isEditingNickname: true, //로딩창 때문에 필요함. isEditingNickname은 닉네임 수정중인지 나타내는 것
+                editNicknameErrorReason: action.data,
+            };
+        }
+        case EDIT_NICKNAME_SUCCESS: {
+            return {
+                ...state,
+                isEditingNickname: false,
+                me: {
+                    ...state.me,
+                    nickname: action.data,
+                },
+                followerList: state.followerList.filter(v => v.id !== action.data),
+            }
+        }
+        case EDIT_NICKNAME_FAILURE: {
             return {
                 ...state,
             };
