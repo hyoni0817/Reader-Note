@@ -1,7 +1,7 @@
 //user 리듀서만 담당
 import { all, takeLatest, put, call, fork, take, takeEvery, delay } from 'redux-saga/effects'
 import axios from 'axios'; //서버에 요청을 보내주는 모듈
-import { LOG_IN_SUCCESS, LOG_IN_FAILURE, LOG_IN_REQUEST, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE, LOG_OUT_SUCCESS, LOG_OUT_FAILURE, LOG_OUT_REQUEST, LOAD_USER_SUCCESS, LOAD_USER_FAILURE, LOAD_USER_REQUEST, FOLLOW_USER_SUCCESS, FOLLOW_USER_FAILURE, FOLLOW_USER_REQUEST, UNFOLLOW_USER_SUCCESS, UNFOLLOW_USER_FAILURE, UNFOLLOW_USER_REQUEST, LOAD_FOLLOWERS_SUCCESS, LOAD_FOLLOWERS_FAILURE, LOAD_FOLLOWERS_REQUEST, LOAD_FOLLOWINGS_SUCCESS, LOAD_FOLLOWINGS_FAILURE, LOAD_FOLLOWINGS_REQUEST, REMOVE_FOLLOWER_SUCCESS, REMOVE_FOLLOWER_FAILURE, REMOVE_FOLLOWER_REQUEST, } from '../reducers/user';
+import { LOG_IN_SUCCESS, LOG_IN_FAILURE, LOG_IN_REQUEST, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE, LOG_OUT_SUCCESS, LOG_OUT_FAILURE, LOG_OUT_REQUEST, LOAD_USER_SUCCESS, LOAD_USER_FAILURE, LOAD_USER_REQUEST, FOLLOW_USER_SUCCESS, FOLLOW_USER_FAILURE, FOLLOW_USER_REQUEST, UNFOLLOW_USER_SUCCESS, UNFOLLOW_USER_FAILURE, UNFOLLOW_USER_REQUEST, LOAD_FOLLOWERS_SUCCESS, LOAD_FOLLOWERS_FAILURE, LOAD_FOLLOWERS_REQUEST, LOAD_FOLLOWINGS_SUCCESS, LOAD_FOLLOWINGS_FAILURE, LOAD_FOLLOWINGS_REQUEST, REMOVE_FOLLOWER_SUCCESS, REMOVE_FOLLOWER_FAILURE, REMOVE_FOLLOWER_REQUEST, EDIT_NICKNAME_SUCCESS, EDIT_NICKNAME_FAILURE, EDIT_NICKNAME_REQUEST, } from '../reducers/user';
 
 function logInAPI(loginData) {
     //서버에 요청을 보내는 부분
@@ -236,6 +236,32 @@ function* watchRemoveFollower() {
     yield takeEvery(REMOVE_FOLLOWER_REQUEST, removeFollowers); 
 }
 
+function editNicknameAPI(nickname) { 
+    return axios.patch(`/user/nickname`, {nickname}, { //부분 수정이기 때문에 patch 사용 (전부 수정이 아니라 닉네임만 수정하기 떄문, 만약 전체를 다른 데이터로 교체하면 put 메서드 사용)
+        withCredentials: true, 
+    }); 
+}
+
+function* editNickname(action) { 
+    try {
+        const result = yield call(editNicknameAPI, action.data); 
+        yield put({ 
+            type: EDIT_NICKNAME_SUCCESS,
+            data: result.data,
+        })
+    } catch (e) { 
+        console.error(e);
+        yield put({
+            type: EDIT_NICKNAME_FAILURE,
+            error: e,
+        })
+    }
+}
+
+function* watchEditNickname() {
+    yield takeEvery(EDIT_NICKNAME_REQUEST, editNickname); 
+}
+
 export default function* userSaga() {
     yield all([
         fork(watchLogIn),
@@ -247,5 +273,6 @@ export default function* userSaga() {
         fork(watchLoadFollowers),
         fork(watchLoadFollowings),
         fork(watchRemoveFollower),
+        fork(watchEditNickname),
     ])
 }
