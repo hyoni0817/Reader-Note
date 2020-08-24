@@ -2,6 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import PropTypes from 'prop-types';
 import withRedux from 'next-redux-wrapper';
+import withReduxSaga from 'next-redux-saga'; //next용 리덕스 사가, 이게 있어야 next서버에서 리덕스 사가를 돌릴 수 있어서 서버 렌더링을 할 수 있다.
 import AppLayout from '../components/AppLayout';
 import { createStore, compose, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux'; //Provider는 react 컴포넌트들의 중앙 통제실인 redux state를 제공해준다. 
@@ -48,8 +49,8 @@ const configureStore = (initialState, options) => {
         window.__REDUX_DEVTOOLS_EXTENSION__() : (f) => f,
     ); // 배포할 때는 __REDUX_DEVTOOLS_EXTENSION__를 빼준다. 그렇지 않으면 redux 데이터가 노출되는데 redux가 state의 중앙 통제실이기 때문에 그것의 흐름이 노출되면 보안에 위협이 되기 때문에 빼줘야 한다.
     const store = createStore(reducer, initialState, enhancer);
-    sagaMiddlewares.run(rootSaga);
+    store.sagaTask = sagaMiddlewares.run(rootSaga); //withReduxSaga가 store.sagaTask 이 부분을 내부에서 필요로 함. 그래서 이 부분이 있어야 next에서 리덕스 사가로 서버사이드 렌더링을 할 수 있다.
     return store;
 };
 
-export default withRedux(configureStore)(ReaderNote); 
+export default withRedux(configureStore)(withReduxSaga(ReaderNote));
