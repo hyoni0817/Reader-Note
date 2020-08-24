@@ -13,13 +13,6 @@ const Home = () => {
     const { me } = useSelector(state => state.user); 
     const { mainPosts } = useSelector(state => state.post);
 
-    useEffect(() => {
-        //index.js 렌더링 될 때
-        dispatch({
-            type: LOAD_MAIN_POSTS_REQUEST,
-        })
-    }, []); //[]에 아무것도 넣지 않으면 componentDidMount와 같다.
-
     return (
         <>
             <div>
@@ -32,6 +25,13 @@ const Home = () => {
             </div>
         </>
     )
+};
+
+Home.getInitialProps = async (context) => { 
+    console.log(Object.keys(context)); 
+    context.store.dispatch({
+        type:LOAD_MAIN_POSTS_REQUEST,
+    }) 
 };
 
 export default Home;
