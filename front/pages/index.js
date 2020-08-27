@@ -9,7 +9,6 @@ import { LOAD_MAIN_POSTS_REQUEST } from '../reducers/post';
 //import { loginAction, logoutAction, LOG_IN, LOG_OUT } from '../reducers/user';
 
 const Home = () => {
-    const dispatch = useDispatch(); 
     const { me } = useSelector(state => state.user); 
     const { mainPosts } = useSelector(state => state.post);
 
