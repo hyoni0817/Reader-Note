@@ -9,6 +9,8 @@ import { Provider } from 'react-redux'; //Provider는 react 컴포넌트들의 �
 import reducer from '../reducers';//rootReducer
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from '../sagas';
+import { LOAD_USER_REQUEST } from '../reducers/user';
+import axios from 'axios';
 
 const ReaderNote = ({ Component, store, pageProps }) => { 
     return(
@@ -33,9 +35,24 @@ ReaderNote.propTypes = {
 }
 
 ReaderNote.getInitialProps = async (context) => { 
+    //getInitialProps가 서버일 때도 실행되고 프론트일 때도 실행되기 때문에 분기처리를 해줘야 함. 
     console.log(context);
     const { ctx, Component } = context;
     let pageProps = {};
+    const state = ctx.store.getState(); //ctx안에 store가 있기 때문에 서버쪽 데이터를 불러 올 수 있는 것.
+    const cookie = ctx.isServer ? ctx.req.headers.cookie : ''; //withCredential대신에 직접 쿠키를 넣어줌. 참고로 req는 서버 환경일때만 들어있어서 클라이언트 환경일 경우 에러가 발생함. 그래서 서버 환경인지 아닌지 구별가능.
+    console.log('cookie', cookie);
+
+    //서버이고 쿠키가 있을 때 수동으로 cookie 넣는 작업 실행.클라이언트이면 알아서 쿠키를 집어넣어 주니까 아래 코드 실행 안해줌.
+    if (ctx.isServer && cookie) { //서버 일 때 실햏 
+        axios.defaults.headers.Cookie = cookie; 
+        //axios에 기본적으로 쿠키 데이터를 기본으로 심어주게 해줄 수 있다. 브라우저가 없기 때문에 서버쪽에서 쿠키를 백엔드 서버로 보내기위해서는 이렇게 직접 해줘야 함.
+    }
+    if (!state.user.me) {
+        ctx.store.dispatch({
+            type: LOAD_USER_REQUEST, //이와 같은 코드 처리로 유저 정보도 서버사이드 렌더링이 됨.
+        });
+    }
     if (Component.getInitialProps) {
        pageProps = await Component.getInitialProps(ctx); 
     }
