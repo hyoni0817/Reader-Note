@@ -1,5 +1,5 @@
 //프로필 화면(팔로워 및 팔로잉 목록, 나의 게시글 정보)
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { Button, List, Card, Icon } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import PostCard from '../components/PostCard';
@@ -9,25 +9,8 @@ import { LOAD_USER_POSTS_REQUEST } from '../reducers/post';
 
 const Profile = () => {
     const dispatch = useDispatch();
-    const { me, followingList, followerList } = useSelector(state => state.user);
+    const { followingList, followerList } = useSelector(state => state.user);
     const { mainPosts } = useSelector(state => state.post);
-
-    useEffect(() => {
-        if (me) {
-            dispatch({
-                type: LOAD_FOLLOWERS_REQUEST,
-                data: me.id,
-            });
-            dispatch({
-                type: LOAD_FOLLOWINGS_REQUEST,
-                data: me.id,
-            });
-            dispatch({
-                type: LOAD_USER_POSTS_REQUEST,
-                data: me.id,
-            });
-        }      
-    }, [ me && me.id ]);
     
     const onUnfollow = useCallback( userId => () => {
         dispatch({
@@ -86,4 +69,25 @@ const Profile = () => {
     );
 };
 
+Profile.getInitialProps = async (context) => {
+    const state = context.store.getState(); //state를 이용해 me에 접근 가능
+    //이 직전에 LOAD_USERS_REQUEST. LOAD_USERS_REQUEST가 먼저 끝나야 state.user.me가 생김. 
+    context.store.dispatch({
+        type: LOAD_FOLLOWERS_REQUEST,
+        data: state.user.me && state.user.me.id, //me가 뒤에 생기기 때문에 data가 null다. null인 경우에는 '나(지신)'이라고 간주한다.(숫자 0을 자신의 아이디로 침. 그래서 서버쪽에서는 아이디가 0이면 내 정보겠구나 하고 생각함.)
+    });
+    context.store.dispatch({
+        type: LOAD_FOLLOWINGS_REQUEST,
+        data: state.user.me && state.user.me.id,
+    });
+    context.store.dispatch({
+        type: LOAD_USER_POSTS_REQUEST,
+        data: state.user.me && state.user.me.id,
+    });
+
+    // 이 쯤에서 LOAD_USERS_SUCCESS 돼서 me가 생김. 그래서 뒤에 me가 생기기 때문에 위에서 사용되는 me는 아직 me가 생성전이라서 접근을 하지 못한다.
+    // 해결 방법
+    // 1. LOAD_USERS_SUCCESS가 되고난 후에 위의 세가지 액션을 처리해주는 방법 ( 이 방법은 복잡한데다가 시간도 오래 걸림)
+    // 2. 네 개의 액션을 동시에 보내면서 정상적으로 동작하는 방법이 가장 좋음.
+}
 export default Profile;
