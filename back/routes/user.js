@@ -118,7 +118,7 @@ router.post('/login', (req, res, next) => { //POST /api/user/login
 router.get('/:id/followings', isLoggedIn, async (req, res, next) => { // /api/user/:id/followings 내가 팔로잉하고 있는 사람들
     try {
         const user = await db.User.findOne({
-            where: { id: parseInt(req.params.id, 10) },
+            where: { id: parseInt(req.params.id, 10) || (req.user && req.user.id) || 0 },
         });
         const followings = await user.getFollowings({ //시퀄라이즈에 옵션을 줄 수 있다.
             attributes: ['id', 'nickname'] //비밀번호를 가져오지 않게 하기 위해서 속성을 따로 선택해서 가져온다.
@@ -133,8 +133,8 @@ router.get('/:id/followings', isLoggedIn, async (req, res, next) => { // /api/us
 router.get('/:id/followers', isLoggedIn, async (req, res, next) => { // /api/user/:id/followers 나를 팔로워하고 있는 사람들
     try {
         const user = await db.User.findOne({
-            where: { id: parseInt(req.params.id, 10) },
-        });
+            where: { id: parseInt(req.params.id, 10) || (req.user && req.user.id) || 0}, //id가 남의 아이디면 그사람의 팔로잉 목록을 가져오고, 0이면 내 팔로워 목록을 가져온다. 
+        }); 
         const followers = await user.getFollowers({ //시퀄라이즈에 옵션을 줄 수 있다.
             attributes: ['id', 'nickname'] //비밀번호를 가져오지 않게 하기 위해서 속성을 따로 선택해서 가져온다.
         });
@@ -189,7 +189,7 @@ router.get('/:id/posts', async (req, res) => {
     try {
         const posts = await db.Post.findAll({
             where: {
-                UserId: parseInt(req.params.id, 10), //작성자는 UserId 컬럼에 있다. 
+                UserId: parseInt(req.params.id, 10) || (req.user && req.user.id) || 0, //작성자는 UserId 컬럼에 있다. 남의 아이디가 들어있으면 그 사람의 게시글을 가져오고, 만약에 id가 0이면 내 게시글을 가져옴.
                 RetweetId: null, //리트윗한 게시글 빼고 내가쓴 게시글만 불러온다.
             },
             include: [{
