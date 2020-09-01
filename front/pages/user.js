@@ -1,13 +1,11 @@
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { Avatar, Card } from 'antd';
 import { LOAD_USER_POSTS_REQUEST } from '../reducers/post';
 import { LOAD_USER_REQUEST } from '../reducers/user';
 import PostCard from '../components/PostCard';
 
 const User = () => {
-    const dispatch = useDispatch();
     const { mainPosts } = useSelector(state => state.post);
     const { userInfo } = useSelector(state => state.user);
 
