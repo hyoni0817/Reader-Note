@@ -60,6 +60,10 @@ const Signup = () => {
         setTerm(e.target.checked);
     }, []);
 
+    if (me) { //로그인한 상태면 아예 회원가입 페이지를 보여주지 않게 함.
+        return null;
+    }
+
     return (
         <>
             <Form onSubmit={onSubmit} style={{ padding: 10 }}>
