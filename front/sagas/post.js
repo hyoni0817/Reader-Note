@@ -143,8 +143,8 @@ function* watchLoadHashtagPosts() {
     yield takeLatest(LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts); 
 }
 
-function loadUserPostsAPI(id) {
-    return axios.get(`/user/${id}/posts`); 
+function loadUserPostsAPI(id) { //id가 null 이면 0(null의 값을 자신으로 침.)
+    return axios.get(`/user/${id || 0}/posts`); 
 }
 
 function* loadUserPosts(action) { 

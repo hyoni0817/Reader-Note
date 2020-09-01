@@ -158,8 +158,8 @@ function* watchUnfollow() {
     yield takeEvery(UNFOLLOW_USER_REQUEST, unfollow); 
 }
 
-function loadFollowersAPI(userId) { 
-    return axios.get(`/user/${userId}/followers`, {
+function loadFollowersAPI(userId ) { //userId가 null인 경우에는 0 (null의 값을 자신으로 침.)
+    return axios.get(`/user/${userId || 0}/followers`, {
         withCredentials: true, 
     }); 
 }
@@ -184,8 +184,8 @@ function* watchLoadFollowers() {
     yield takeEvery(LOAD_FOLLOWERS_REQUEST, loadFollowers); 
 }
 
-function loadFollowingsAPI(userId) { 
-    return axios.get(`/user/${userId}/followings`, {
+function loadFollowingsAPI( userId ) { //userId가 null인 경우에는 0 (null의 값을 자신으로 침.)
+    return axios.get(`/user/${userId || 0}/followings`, {
         withCredentials: true, 
     }); 
 }
