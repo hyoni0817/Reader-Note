@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Avatar, Card } from 'antd';
-import { LOAD_USER_POSTS_REQUEST, LOAD_MAIN_POSTS_REQUEST } from '../reducers/post';
+import { LOAD_USER_POSTS_REQUEST } from '../reducers/post';
 import { LOAD_USER_REQUEST } from '../reducers/user';
 import PostCard from '../components/PostCard';
 
@@ -43,7 +43,7 @@ User.getInitialProps = async (context) => {
         data: id,
     });
     context.store.dispatch({
-        type: LOAD_MAIN_POSTS_REQUEST,
+        type: LOAD_USER_POSTS_REQUEST,
         data: id,
     });
     return { id };
