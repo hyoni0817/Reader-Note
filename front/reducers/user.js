@@ -208,7 +208,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 me: {
                     ...state.me,
-                    Posts: [{ id: action.data }, ...state.me.Posts], //기존 포스트에 새로 추가한 게시글의 아이디를 추가, 이렇게 해야지만 user 리듀서안의 데이터를 수정할 수 있다.
+                    Posts: [{ id: action.data.id }, ...state.me.Posts], //기존 포스트에 새로 추가한 게시글의 아이디를 추가, 이렇게 해야지만 user 리듀서안의 데이터를 수정할 수 있다.
                 }
             }
         }
