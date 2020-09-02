@@ -95,6 +95,17 @@ router.get('/:id/comments', isPostExist, async (req, res, next) => { //게시글
     }
 });
 
+router.delete('/:id', isLoggedIn, isPostExist, async (req, res, next) => {
+    try {
+        const post = await db.Post.findOne({ where: { id: req.params.id }});
+        await db.Post.destroy({ where: { id: req.params.id }}); //destroy는 삭제하는 것.
+        res.send(req.params.id);
+    } catch (e) {
+        console.error(e);
+        next(e);
+    }
+})
+
 router.post('/:id/comment', isLoggedIn, isPostExist, async (req, res, next) => { //POST ex) /api/post/3/comment
     try {
         const post = res.locals.post;
