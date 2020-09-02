@@ -121,7 +121,9 @@ router.get('/:id/followings', isLoggedIn, async (req, res, next) => { // /api/us
             where: { id: parseInt(req.params.id, 10) || (req.user && req.user.id) || 0 }, //id가 0일 경우 현재 로그인한 사용자의 팔로우, 팔로워 가져오기로 함. 현재 로그인한 사용자의 정보는 req.user에 저장되어 있다.
         });
         const followings = await user.getFollowings({ //시퀄라이즈에 옵션을 줄 수 있다.
-            attributes: ['id', 'nickname'] //비밀번호를 가져오지 않게 하기 위해서 속성을 따로 선택해서 가져온다.
+            attributes: ['id', 'nickname'], //비밀번호를 가져오지 않게 하기 위해서 속성을 따로 선택해서 가져온다.
+            limit: parseInt(req.query.limit, 10),
+            offset: parseInt(req.query.offset, 10),
         });
         res.json(followings);
     } catch (e) {
@@ -136,7 +138,9 @@ router.get('/:id/followers', isLoggedIn, async (req, res, next) => { // /api/use
             where: { id: parseInt(req.params.id, 10) || (req.user && req.user.id) || 0}, //id가 남의 아이디면 그사람의 팔로잉 목록을 가져오고, 0이면 내 팔로워 목록을 가져온다. 
         }); 
         const followers = await user.getFollowers({ //시퀄라이즈에 옵션을 줄 수 있다.
-            attributes: ['id', 'nickname'] //비밀번호를 가져오지 않게 하기 위해서 속성을 따로 선택해서 가져온다.
+            attributes: ['id', 'nickname'], //비밀번호를 가져오지 않게 하기 위해서 속성을 따로 선택해서 가져온다.
+            limit: parseInt(req.query.limit, 10),
+            offset: parseInt(req.query.offset, 10),
         });
         res.json(followers);
     } catch (e) {
