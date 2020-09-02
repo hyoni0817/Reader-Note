@@ -118,7 +118,7 @@ router.post('/login', (req, res, next) => { //POST /api/user/login
 router.get('/:id/followings', isLoggedIn, async (req, res, next) => { // /api/user/:id/followings 내가 팔로잉하고 있는 사람들
     try {
         const user = await db.User.findOne({
-            where: { id: parseInt(req.params.id, 10) || (req.user && req.user.id) || 0 }, //id가 0일 경우 현재 로그인한 사용자의 팔로우, 팔로워 가져오기로 함.
+            where: { id: parseInt(req.params.id, 10) || (req.user && req.user.id) || 0 }, //id가 0일 경우 현재 로그인한 사용자의 팔로우, 팔로워 가져오기로 함. 현재 로그인한 사용자의 정보는 req.user에 저장되어 있다.
         });
         const followings = await user.getFollowings({ //시퀄라이즈에 옵션을 줄 수 있다.
             attributes: ['id', 'nickname'] //비밀번호를 가져오지 않게 하기 위해서 속성을 따로 선택해서 가져온다.
