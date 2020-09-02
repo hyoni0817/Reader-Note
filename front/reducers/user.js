@@ -69,7 +69,8 @@ export const EDIT_NICKNAME_REQUEST = 'EDIT_NICKNAME_REQUEST'; //액션의 이름
 export const EDIT_NICKNAME_SUCCESS = 'EDIT_NICKNAME_SUCCESS';
 export const EDIT_NICKNAME_FAILURE = 'EDIT_NICKNAME_FAILURE';
 
-export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
+export const ADD_POST_TO_ME = 'ADD_POST_TO_ME'; //'짹짹'에 추가된 게시글 갯수 업데이트
+export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME'; //'짹짹'에 삭제된 게시글 갯수 업데이트
 
 export const loginRequestAction = data => ({
     type: LOG_IN_REQUEST,
@@ -208,6 +209,15 @@ const reducer = (state = initialState, action) => {
                 me: {
                     ...state.me,
                     Posts: [{ id: action.data }, ...state.me.Posts], //기존 포스트에 새로 추가한 게시글의 아이디를 추가, 이렇게 해야지만 user 리듀서안의 데이터를 수정할 수 있다.
+                }
+            }
+        }
+        case REMOVE_POST_OF_ME: {
+            return {
+                ...state,
+                me: {
+                    ...state.me,
+                    Posts: state.me.Posts.filter((v) => v.id !== action.data),
                 }
             }
         }
