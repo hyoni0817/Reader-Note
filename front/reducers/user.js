@@ -20,6 +20,8 @@ export const initialState = { //initialState는 웹을 대표하는 모든 상�
     userInfo: null, //남의 정보
     isEditingNickname: false, //이름 변경 중
     editNicknameErrorReason: '', //이름 변경 실패 사유
+    hasMoreFollower: true, //팔로워 목록 더보기 버튼 표시 여부
+    hasMoreFollowing: true, //팔로잉 목록 더보기 버튼 표시 여부
 }; 
 
 //비동기 요청은 뒤에 REQUEST, SUCCESS, FAILURE를 붙인다. 그러면 Redux-saga에서 동작하는 것인 것을 알 수 있어서 redux에서 동작하는 것과 구별이 가능하다. 그리고 비동기는 무조건 액션이 최소 3개나온다. 
@@ -224,12 +226,15 @@ const reducer = (state = initialState, action) => {
         case LOAD_FOLLOWERS_REQUEST: {
             return {
                 ...state,
+                hasMoreFollower: action.offset ? state.hasMoreFollower: true, 
+                //처음 데이터를 가져올 때는 더보기 버튼을 true로
             };
         }
         case LOAD_FOLLOWERS_SUCCESS: {
             return {
                 ...state,
                 followerList: state.followerList.concat(action.data),
+                hasMoreFollower: action.data.length === 3, //가져온 데이터의 갯수가 3개면 다음 데이터가 더 있을 수 있으니 더보기 버튼 유지, 가져온 데이터가 1개나 2개면 더보기 버튼 없앰. 
             }
         }
         case LOAD_FOLLOWERS_FAILURE: {
@@ -240,12 +245,14 @@ const reducer = (state = initialState, action) => {
         case LOAD_FOLLOWINGS_REQUEST: {
             return {
                 ...state,
+                hasMoreFollowing: action.offset ? state.hasMoreFollowing : true,
             };
         }
-        case LOAD_FOLLOWINGS_SUCCESS: {
+        case LOAD_FOLLOWINGS_SUCCESS: {         
             return {
                 ...state,
                 followingList: state.followingList.concat(action.data),
+                hasMoreFollowing: action.data.length === 3,
             }
         }
         case LOAD_FOLLOWINGS_FAILURE: {
