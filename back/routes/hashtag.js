@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/:tag', async (req, res, next) => {
     try {
-        let whrer = {};
+        let where = {};
         if(parseInt(req.query.lastId, 10)) {
             where = {
                 id: {
