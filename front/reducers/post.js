@@ -163,7 +163,7 @@ const reducer = (state = initialState, action) => {
         case LOAD_USER_POSTS_REQUEST: {
             return {
                 ...state, 
-                mainPosts: [],
+                mainPosts: action.lastId === 0 ? [] : state.mainPosts, 
             }
         }
         case LOAD_MAIN_POSTS_SUCCESS: 
@@ -171,7 +171,7 @@ const reducer = (state = initialState, action) => {
         case LOAD_USER_POSTS_SUCCESS: {
             return {
                 ...state, 
-                mainPosts: action.data, //서버로 부터 받은 데이터
+                mainPosts: state.mainPosts.concat(action.data), //서버로 부터 받은 데이터
             }
         }
         case LOAD_MAIN_POSTS_FAILURE: 
