@@ -1,10 +1,13 @@
 #front
 front/node_modules
 front/.next
+front/.env
 
 #back
 back/node_modules
 back/config
+back/uploads
+back/.env
 
 #etc.
 comment
