@@ -164,6 +164,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state, 
                 mainPosts: action.lastId === 0 ? [] : state.mainPosts, 
+                hasMorePost: action.lastId ? state.hasMorePost : true, //처음 보는 경우는 스크롤 기능을 활성화(lastId가 0일 때는 false가 되므로 이 조건문에서는 false 자리에 외치한 true 값을 가지게 됨.)
             }
         }
         case LOAD_MAIN_POSTS_SUCCESS: 
@@ -172,6 +173,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state, 
                 mainPosts: state.mainPosts.concat(action.data), //서버로 부터 받은 데이터
+                hasMorePost: action.data.length === 10, //더보기 버튼이랑 똑같은데 더보기 버튼을 누르는게 스크롤로 바뀌었다고 생각하면 됨. 게시글이 더 있는지 없는지 판단해서 스크롤을 더 할지 말지 결정하는 부분.
             }
         }
         case LOAD_MAIN_POSTS_FAILURE: 
