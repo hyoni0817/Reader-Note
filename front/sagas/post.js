@@ -94,13 +94,13 @@ function* watchLoadComments() {
     yield takeLatest(LOAD_COMMENTS_REQUEST, loadComments); 
 }
 
-function loadMainPostsAPI() {
-    return axios.get('/posts'); 
+function loadMainPostsAPI(lastId = 0 , limit = 10) { //게시글이 하나도 안불러와져 있는 경우에는 lastId가 없는데 이 때는 id를 0으로 둔다. 만약 서버쪽에서 lastId가 0으로 왔다면 게시글 id가 0인게 아니라 처음부터 불러와야겠구나 하고 생각해야함.
+    return axios.get(`/posts?lastId=${lastId}&limit=${limit}`); 
 }
 
-function* loadMainPosts() { 
+function* loadMainPosts(action) { 
     try {
-        const result = yield call(loadMainPostsAPI);
+        const result = yield call(loadMainPostsAPI, action.lastId);
         yield put({
             type: LOAD_MAIN_POSTS_SUCCESS,
             data: result.data, 
@@ -120,13 +120,13 @@ function* watchLoadMainPosts() {
 
 }
 
-function loadHashtagPostsAPI(tag) {
-    return axios.get(`/hashtag/${encodeURIComponent(tag)}`); 
+function loadHashtagPostsAPI(tag, lastId) {
+    return axios.get(`/hashtag/${encodeURIComponent(tag)}?lastId=${lastId}&limit=10`); 
 }
 
 function* loadHashtagPosts(action) { 
     try {
-        const result = yield call(loadHashtagPostsAPI, action.data);
+        const result = yield call(loadHashtagPostsAPI, action.data, action.lastId);
         yield put({
             type: LOAD_HASHTAG_POSTS_SUCCESS,
             data: result.data, 
