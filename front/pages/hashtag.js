@@ -18,7 +18,7 @@ const Hashtag = ({ tag }) => {
             if (hasMorePost) { //더 불러올 게시글이 있을 대 요청, 더 불러올 게시글이 없다면 요청을 하지 않음.
                 dispatch({
                     type: LOAD_HASHTAG_POSTS_REQUEST,
-                    lastId: mainPosts[mainPosts.length -1].id,
+                    lastId: mainPosts[mainPosts.length - 1] && mainPosts[mainPosts.length -1].id,
                     data: tag,
                 })
             }
