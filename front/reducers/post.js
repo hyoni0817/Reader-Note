@@ -163,7 +163,7 @@ const reducer = (state = initialState, action) => {
         case LOAD_USER_POSTS_REQUEST: {
             return {
                 ...state, 
-                mainPosts: action.lastId === 0 ? [] : state.mainPosts, 
+                mainPosts: !action.lastId ? [] : state.mainPosts, 
                 hasMorePost: action.lastId ? state.hasMorePost : true, //처음 보는 경우는 스크롤 기능을 활성화(lastId가 0일 때는 false가 되므로 이 조건문에서는 false 자리에 외치한 true 값을 가지게 됨.)
             }
         }
