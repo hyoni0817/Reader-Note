@@ -41,6 +41,10 @@ const Hashtag = ({ tag }) => {
     );
 };
 
+Hashtag.propTypes = {	
+    tag: PropTypes.string.isRequired,	
+};
+
 Hashtag.getInitialProps = async (context) => { 
     const tag = context.query.tag;
     console.log('hashtag getInitialProps', tag);
