@@ -30,7 +30,7 @@ const Hashtag = ({ tag }) => {
         return () => {
             window.removeEventListener('scroll', onScroll);
         }
-    }, [mainPosts.length, tag]);
+    }, [hasMorePost, mainPosts.length, tag]);
 
     return (
         <div>
