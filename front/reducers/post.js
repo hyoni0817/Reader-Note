@@ -1,3 +1,5 @@
+import produce from 'immer';
+
 export const initialState = {
     mainPosts: [], //화면에 보일 포스트들
     imagePaths: [], //미리보기 이미지 경로
@@ -67,207 +69,146 @@ export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
 export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 
 const reducer = (state = initialState, action) => {
-    switch (action.type) {
-        case UPLOAD_IMAGES_REQUEST: {
-            return {
-                ...state, 
+    return produce(state, (draft) => {
+        switch (action.type) {
+            case UPLOAD_IMAGES_REQUEST: {
+                break;
             }
-        }
-        case UPLOAD_IMAGES_SUCCESS: {
-            return {
-                ...state, 
-                imagePaths: [...state.imagePaths, ...action.data], //이미지 미리보기 할 수 있는 경로
+            case UPLOAD_IMAGES_SUCCESS: {
+                action.data.forEach((p) => {
+                    draft.imagePaths.push(p);
+                }) 
+                //draft.imagePaths = draft.imagePaths.concat(action.data);
+                break;
             }
-        }
-        case UPLOAD_IMAGES_FAILURE: {
-            return {
-                ...state, 
+            case UPLOAD_IMAGES_FAILURE: {
+                break;
             }
-        }
-
-        case REMOVE_IMAGE: {
-            return {
-                ...state,
-                imagePaths: state.imagePaths.filter((v, i) => i !== action.index), //필터링하고싶은 이미지(삭제하고 싶은 이미지)가 빠짐.
-            };
-        }
-        case ADD_POST_REQUEST: {
-            return {
-                ...state, 
-                isAddingPost: true,
-                addPostErrorReason: '',
-                postAdded: false,
+    
+            case REMOVE_IMAGE: {
+                const index = draft.imagePaths.findIndex((v, i) => i === action.index);
+                draft.imagePaths.splice(index, 1); 
+                break;
             }
-        }
-        case ADD_POST_SUCCESS: {
-            return {
-                ...state, 
-                isAddingPost: false,
-                mainPosts: [action.data, ...state.mainPosts],
-                postAdded: true,
-                imagePaths: [],
+            case ADD_POST_REQUEST: {
+                draft.isAddingPost = true;
+                draft.addingPostErrorReason = '';
+                draft.postAdded = false;
+                break;
             }
-        }
-        case ADD_POST_FAILURE: {
-            return {
-                ...state, 
-                isAddingPost: false,
-                addPostErrorReason: action.error,
+            case ADD_POST_SUCCESS: {
+                draft.isAddingPost = false;
+                draft.mainPosts.unshift(action.data);
+                draft.postAdded = true;
+                draft.imagePaths = [];
+                break;
             }
-        }
-
-        case ADD_COMMENT_REQUEST: {
-            return {
-                ...state, 
-                isAddingComment: true,
-                addCommentErrorReason: '',
-                commentAdded: false,
+            case ADD_POST_FAILURE: {
+                draft.isAddingPost = false;
+                draft.addPostErrorReason = action.error;
+                break;
             }
-        }
-        case ADD_COMMENT_SUCCESS: {
-            const postIndex = state.mainPosts.findIndex(v=>v.id === action.data.postId); //여기서 action은 sagas/post.js의 addComment()를 통해 ADD_COMMNET_SUCCESS로 전달 받은 액션이다. 즉 SUCCESS의 액션이다. 
-            const post = state.mainPosts[postIndex];
-            const Comments = [...post.Comments, action.data.comment];
-            const mainPosts = [...state.mainPosts];
-            mainPosts[postIndex] = {...post, Comments};
-
-            return {
-                ...state, 
-                isAddingComment: false,
-                mainPosts,
-                commentAdded: true,
+    
+            case ADD_COMMENT_REQUEST: {
+                draft.isAddingComment = true;
+                draft.addCommentErrorReason = '';
+                draft.commentAdded = false;
+                break;
             }
-        }
-        case ADD_COMMENT_FAILURE: {
-            return {
-                ...state, 
-                isAddingComment: false,
-                addCommentErrorReason: action.error,
+            case ADD_COMMENT_SUCCESS: {
+                const postIndex = draft.mainPosts.findIndex(v=>v.id === action.data.postId); //여기서 action은 sagas/post.js의 addComment()를 통해 ADD_COMMNET_SUCCESS로 전달 받은 액션이다. 즉 SUCCESS의 액션이다. 
+                draft.mainPosts[postIndex].Comments.push(action.data.comment);
+                draft.isAddingComment = false;
+                draft.commentAdded = true;
+                break;
             }
-        }
-
-        case LOAD_COMMENTS_SUCCESS: {
-            const postIndex = state.mainPosts.findIndex(v => v.id === action.data.postId);
-            const post = state.mainPosts[postIndex];
-            const Comments = action.data.comments;
-            const mainPosts = [...state.mainPosts];
-            mainPosts[postIndex] = { ...post, Comments };
-            return {
-                ...state,
-                mainPosts,
-            };
-        }
-        //공통된 작업을 수행한다면 아래와 같이 case를 3개 연달아서 사용할 수 있다.
-        case LOAD_MAIN_POSTS_REQUEST: 
-        case LOAD_HASHTAG_POSTS_REQUEST: 
-        case LOAD_USER_POSTS_REQUEST: {
-            return {
-                ...state, 
-                mainPosts: !action.lastId ? [] : state.mainPosts, 
-                hasMorePost: action.lastId ? state.hasMorePost : true, //처음 보는 경우는 스크롤 기능을 활성화(lastId가 0일 때는 false가 되므로 이 조건문에서는 false 자리에 외치한 true 값을 가지게 됨.)
+            case ADD_COMMENT_FAILURE: {
+                draft.isAddingComment = false;
+                draft.addCommentErrorReason = action.error;
+                break;
             }
-        }
-        case LOAD_MAIN_POSTS_SUCCESS: 
-        case LOAD_HASHTAG_POSTS_SUCCESS: 
-        case LOAD_USER_POSTS_SUCCESS: {
-            return {
-                ...state, 
-                mainPosts: state.mainPosts.concat(action.data), //서버로 부터 받은 데이터
-                hasMorePost: action.data.length === 10, //더보기 버튼이랑 똑같은데 더보기 버튼을 누르는게 스크롤로 바뀌었다고 생각하면 됨. 게시글이 더 있는지 없는지 판단해서 스크롤을 더 할지 말지 결정하는 부분.
+    
+            case LOAD_COMMENTS_SUCCESS: {
+                const postIndex = draft.mainPosts.findIndex(v => v.id === action.data.postId);
+                draft.mainPosts[postIndex].Comments = action.data.comments;
+                break;
             }
-        }
-        case LOAD_MAIN_POSTS_FAILURE: 
-        case LOAD_HASHTAG_POSTS_FAILURE: 
-        case LOAD_USER_POSTS_FAILURE: {
-            return {
-                ...state, 
+            //공통된 작업을 수행한다면 아래와 같이 case를 3개 연달아서 사용할 수 있다.
+            case LOAD_MAIN_POSTS_REQUEST: 
+            case LOAD_HASHTAG_POSTS_REQUEST: 
+            case LOAD_USER_POSTS_REQUEST: {
+                draft.mainPosts = !action.lastId ? [] : draft.mainPosts;
+                draft.hasMorePost = action.lastId ? draft.hasMorePost : true; 
+                break;
             }
-        }
-        case LIKE_POST_REQUEST: {
-            return {
-                ...state, 
+            case LOAD_MAIN_POSTS_SUCCESS: 
+            case LOAD_HASHTAG_POSTS_SUCCESS: 
+            case LOAD_USER_POSTS_SUCCESS: {
+                action.data.forEach((p) => {
+                    draft.mainPosts.push(p);
+                });
+                draft.hasMorePost = action.data.length === 10;
+                break;
             }
-        }
-        case LIKE_POST_SUCCESS: {
-            const postIndex = state.mainPosts.findIndex(v => v.id === action.data.postId); //게시글 찾기
-            const post = state.mainPosts[postIndex];
-            const Likers = [{ id: action.data.userId }, ...post.Likers]; //좋아요 목록을 누른 사람들에 자신의 아이디 추가
-            const mainPosts = [...state.mainPosts];
-            mainPosts[postIndex] = {...post, Likers};
-            return {
-                ...state, 
-                mainPosts,
+            case LOAD_MAIN_POSTS_FAILURE: 
+            case LOAD_HASHTAG_POSTS_FAILURE: 
+            case LOAD_USER_POSTS_FAILURE: {
+                break;
             }
-        }
-        case LIKE_POST_FAILURE: {
-            return {
-                ...state, 
+            case LIKE_POST_REQUEST: {
+                break;
             }
-        }
-
-        case UNLIKE_POST_REQUEST: {
-            return {
-                ...state, 
+            case LIKE_POST_SUCCESS: {
+                const postIndex = draft.mainPosts.findIndex(v => v.id === action.data.postId); //게시글 찾기
+                draft.mainPosts[postIndex].Likers.unshift({id: action.data.userId});
+                break;
             }
-        }
-        case UNLIKE_POST_SUCCESS: {
-            const postIndex = state.mainPosts.findIndex(v => v.id === action.data.postId); //게시글 찾기
-            const post = state.mainPosts[postIndex];
-            const Likers = post.Likers.filter(v => v.id !== action.data.userId); //필터링으로 좋아요 누른 아이디 목록에서 자신의 아이디를 빼는 것은 좋아요를 누르지 않은 것과 같다.
-            const mainPosts = [...state.mainPosts];
-            mainPosts[postIndex] = {...post, Likers};
-            return {
-                ...state, 
-                mainPosts,
+            case LIKE_POST_FAILURE: {
+                break;
             }
-        }
-        case UNLIKE_POST_FAILURE: {
-            return {
-                ...state, 
+    
+            case UNLIKE_POST_REQUEST: {
+                break;
             }
-        }
-
-        case RETWEET_REQUEST: {
-            return {
-                ...state, 
+            case UNLIKE_POST_SUCCESS: {
+                const postIndex = draft.mainPosts.findIndex(v => v.id === action.data.postId); //게시글 찾기
+                const likeIndex = draft.mainPosts[postIndex].Likers.findIndex(v => v.id === action.data.userId);
+                draft.mainPosts[postIndex].Likers.splice(likeIndex, 1);
+                break;
             }
-        }
-        case RETWEET_SUCCESS: {
-            //retweetWithPrevPost가 action.data에 값이 들어가져 있다.
-            return {
-                ...state, 
-                mainPosts: [action.data, ...state.mainPosts], //기존 게시글(state.mainPosts) 앞에 받아온 게시글(actio.data) 포함만 시켜주면 됨.
+            case UNLIKE_POST_FAILURE: {
+                break;
             }
-        }
-        case RETWEET_FAILURE: {
-            return {
-                ...state, 
+    
+            case RETWEET_REQUEST: {
+                break;
             }
-        }
-        
-        case REMOVE_POST_REQUEST: {
-            return {
-                ...state, 
+            case RETWEET_SUCCESS: {
+                //retweetWithPrevPost가 action.data에 값이 들어가져 있다.
+                draft.mainPosts.unshift(action.data);
+                break;
             }
-        }
-        case REMOVE_POST_SUCCESS: {
-            return {
-                ...state, 
-                mainPosts: state.mainPosts.filter(v => v.id !== action.data), 
+            case RETWEET_FAILURE: {
+                break;
             }
-        }
-        case REMOVE_POST_FAILURE: {
-            return {
-                ...state, 
+            
+            case REMOVE_POST_REQUEST: {
+                break;
             }
-        }
-
-        default: {
-            return {
-                ...state,
+            case REMOVE_POST_SUCCESS: {
+                const index = draft.mainPosts.findIndex(v => v.id === action.data);
+                draft.mainPosts.splice(index, 1);
+                break;
             }
-        } //switch문에 default를 꼭 넣어줘야하며, default의 의미는 아무것도 없지만 기존의 state를 넣은 새로운 state 객체를 리턴한다고 적어주면 된다.
-    }
+            case REMOVE_POST_FAILURE: {
+                break;
+            }
+    
+            default: {
+                break;
+            } //switch문에 default를 꼭 넣어줘야하며, default의 의미는 아무것도 없지만 기존의 state를 넣은 새로운 state 객체를 리턴한다고 적어주면 된다.
+        }
+    });
 }
 
 export default reducer;
