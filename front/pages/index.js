@@ -20,11 +20,9 @@ const Home = () => {
         //scrollY: 스크롤 내린 거리
         //clientHeight: 화면 높이
         //scrollHeight: 전체 화면 길이
-
         if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
-            const lastId = mainPosts[mainPosts.length - 1].id;
+            const lastId = mainPosts[mainPosts.length - 1] && mainPosts[mainPosts.length - 1].id;
             //lastId를 front에서도 기록을 해두면 같은 lastId로 요청 보내는 것을 막을 수 있다. 
-            
             if (!countRef.current.includes(lastId)) { //front에서도 요청을 여러번 보내지 않도록(LOAD_MAIN_POSTS_REQUEST) 안전장치를 마련함.
                 if (hasMorePost) { //더 불러올 게시글이 있을 대 요청, 더 불러올 게시글이 없다면 요청을 하지 않음.
                     dispatch({
