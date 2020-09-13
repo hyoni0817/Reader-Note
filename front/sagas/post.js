@@ -141,7 +141,7 @@ function* loadHashtagPosts(action) {
 }
 
 function* watchLoadHashtagPosts() { 
-    yield takeLatest(LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts); 
+    yield throttle(2000, LOAD_HASHTAG_POSTS_REQUEST, loadHashtagPosts); 
 }
 
 function loadUserPostsAPI(id) { //id가 null 이면 0(null의 값을 자신으로 침.)
