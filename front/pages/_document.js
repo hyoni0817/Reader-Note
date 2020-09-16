@@ -1,11 +1,15 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import PropTypes from 'prop-types';
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 
 class MyDocument extends Document { 
     static async getInitialProps(context) { 
         const initialProps = await Document.getInitialProps(context);
-        return { ...initialProps, helmet: Helmet.renderStatic() } 
+        const page = context.renderPage((App) => (props) => <App {...props} />); //renderPage로 내부페이지를 렌더링할 수 있게함.
+        //App은 app.js이고 context에서 renderPage를 해줘야 app.js를 실행할 수 있다.
+        return { ...initialProps, ...page, helmet: Helmet.renderStatic() } 
+        //이 page는 this.props.page에 담겨있다.
     }
 
     render() {
@@ -16,6 +20,7 @@ class MyDocument extends Document {
         const bodyAttrs = bodyAttributes.toComponent();
         //웹 사이트의 뼈대(html, head, body)를 직접 document에 작성해줘야 한다.
         //document를 작성하게 되면 이 부분을 직접 컨트롤 할 수있게 된다. 
+
         return(
             <Html {...htmlAttrs}>
                 <Head>
@@ -31,6 +36,10 @@ class MyDocument extends Document {
             </Html>
         )
     }
+}
+
+MyDocument.propTypes = {
+    helmet: PropTypes.object.isRequired,
 }
 
 export default MyDocument;
