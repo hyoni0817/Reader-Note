@@ -1,10 +1,11 @@
 import React from 'react';
-import Helmet from 'react-helmet';
-import Document, { Main, NextScript } from 'next/document';
+import { Helmet } from 'react-helmet';
+import Document, { Html, Head, Main, NextScript } from 'next/document'
 
 class MyDocument extends Document { 
-    static getInitialProps(context) { 
-        return { helmet: Helmet.renderStatic() } 
+    static async getInitialProps(context) { 
+        const initialProps = await Document.getInitialProps(context);
+        return { ...initialProps, helmet: Helmet.renderStatic() } 
     }
 
     render() {
@@ -16,18 +17,20 @@ class MyDocument extends Document {
         //웹 사이트의 뼈대(html, head, body)를 직접 document에 작성해줘야 한다.
         //document를 작성하게 되면 이 부분을 직접 컨트롤 할 수있게 된다. 
         return(
-            <html {...htmlAttrs}>
-                <head>
+            <Html {...htmlAttrs}>
+                <Head>
                     {/* html과 body를 제외한 나머지 태그들은 head 태그에 넣기 */}
                     {Object.values(helmet).map(el => el.toComponent())} 
-                </head>
+                </Head>
                 <body {...bodyAttrs}>
                     {/* Main이 app.js가 될 것이다. */}
                     <Main /> 
                     {/* Next 구동에 필요한 script를 모아둔 것 */}
                     <NextScript />
                 </body>
-            </html>
+            </Html>
         )
     }
 }
+
+export default MyDocument;
