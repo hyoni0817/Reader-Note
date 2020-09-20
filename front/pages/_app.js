@@ -79,7 +79,7 @@ ReaderNote.getInitialProps = async (context) => {
         });
     }
     if (Component.getInitialProps) {
-       pageProps = await Component.getInitialProps(ctx); 
+       pageProps = await Component.getInitialProps(ctx) || {}; 
     }
     return { pageProps };
 }
