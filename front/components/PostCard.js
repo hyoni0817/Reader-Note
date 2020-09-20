@@ -108,7 +108,6 @@ const PostCard = ({ post }) => {
     return (
         <CardWrapper>
         <Card
-            key={+post.createdAt}
             cover={post.Images && post.Images[0] && <PostImages images={post.Images} />}
             actions={[
                 <Icon type="retweet" key="retweet" onClick={onRetweet}/>,
@@ -203,7 +202,7 @@ PostCard.propTypes = {
         User: PropTypes.object,
         content: PropTypes.string,
         img: PropTypes.string,
-        createAt: PropTypes.object,
+        //createAt: PropTypes.string,
     }),
 };
 //Object라고 써도 되지만 shape은 객체 안에 데이터 형태를 상세하게 쓸 수 있다.
