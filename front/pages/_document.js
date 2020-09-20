@@ -1,14 +1,17 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
-import Document, { Html, Head, Main, NextScript } from 'next/document'
+import Document, { Html, Head, Main, NextScript } from 'next/document';
+import { ServerStyleSheet } from 'styled-components';
 
 class MyDocument extends Document { 
     static async getInitialProps(context) { 
+        const sheet = new ServerStyleSheet();
         const initialProps = await Document.getInitialProps(context);
-        const page = context.renderPage((App) => (props) => <App {...props} />); //renderPage로 내부페이지를 렌더링할 수 있게함.
+        const page = context.renderPage((App) => (props) => sheet.collectStyles(<App {...props} />)); //renderPage로 내부페이지를 렌더링할 수 있게함.
         //App은 app.js이고 context에서 renderPage를 해줘야 app.js를 실행할 수 있다.
-        return { ...initialProps, ...page, helmet: Helmet.renderStatic() } 
+        const styleTags = sheet.getStyleElement();
+        return { ...initialProps, ...page, helmet: Helmet.renderStatic(), styleTags } 
         //이 page는 this.props.page에 담겨있다.
     }
 
@@ -24,6 +27,7 @@ class MyDocument extends Document {
         return(
             <Html {...htmlAttrs}>
                 <Head>
+                    {this.props.styleTags}
                     {/* html과 body를 제외한 나머지 태그들은 head 태그에 넣기 */}
                     {Object.values(helmet).map(el => el.toComponent())} 
                 </Head>
@@ -40,6 +44,7 @@ class MyDocument extends Document {
 
 MyDocument.propTypes = {
     helmet: PropTypes.object.isRequired,
+    styleTags: PropTypes.object.isRequired,
 }
 
 export default MyDocument;
