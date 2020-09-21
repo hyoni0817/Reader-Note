@@ -13,9 +13,9 @@ const UserProfile = () => {
     return (
         <Card
             actions={[
-                <Link href="/profile" key="twit"><a><div>쨱쨱<br />{me.Posts.length}</div></a></Link>,
-                <Link href="/profile" key="following"><a><div>팔로잉<br />{me.Followings.length}</div></a></Link>,
-                <Link href="/profile" key="follower"><a><div>팔로워<br />{me.Followers.length}</div></a></Link>
+                <Link href="/profile" key="twit" prefetch><a><div>쨱쨱<br />{me.Posts.length}</div></a></Link>,
+                <Link href="/profile" key="following" prefetch><a><div>팔로잉<br />{me.Followings.length}</div></a></Link>,
+                <Link href="/profile" key="follower" prefetch><a><div>팔로워<br />{me.Followers.length}</div></a></Link>
             ]}
         >
             <Card.Meta

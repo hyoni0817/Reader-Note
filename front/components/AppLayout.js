@@ -19,7 +19,7 @@ const AppLayout = ({children}) => {
         <div>
             <Menu mode="horizontal">
                 <Menu.Item key="home"><Link href="/"><a>Reder Note</a></Link></Menu.Item>
-                <Menu.Item key="profile"><Link href="/profile"><a>Profile</a></Link></Menu.Item>
+                <Menu.Item key="profile"><Link href="/profile" prefetch><a>Profile</a></Link></Menu.Item>
                 <Menu.Item key="search">
                     <Input.Search 
                         enterButton 
