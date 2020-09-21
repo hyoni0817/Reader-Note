@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const expressSession = require('express-session');
 const dotenv = require('dotenv');
+const path = require('path');
 
 const dev = process.env.NODE_ENV !== 'production'; //개발모드
 const prod = process.env.NODE_ENV === 'production'; //배포모드
@@ -18,6 +19,7 @@ app.prepare().then(() => {
     const server = express();
 
     server.use(morgan('dev'));
+    server.use('/', express.static(path.join(__dirname, 'public')));//백엔드 파일에서 정적 파일을 제공했던 것 처럼 작성하면 됨. 이 코드 부분이 서버쪽 주소다. 
     server.use(express.json());
     server.use(express.urlencoded({ extended: true}));
     server.use(cookieParser(process.env.COOKIE_SECRET)); 
