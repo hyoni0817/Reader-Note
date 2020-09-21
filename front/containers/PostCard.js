@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux'; 
 import { ADD_COMMENT_REQUEST, LOAD_COMMENTS_REQUEST, UNLIKE_POST_REQUEST, LIKE_POST_REQUEST, RETWEET_REQUEST, REMOVE_POST_REQUEST} from '../reducers/post';
 import { FOLLOW_USER_REQUEST, UNFOLLOW_USER_REQUEST } from '../reducers/user';
-import PostImages from './PostImages';
-import PostCardContent from './PostCardContent';
+import PostImages from '../components/PostImages';
+import PostCardContent from '../components/PostCardContent';
 import styled from 'styled-components';
 
 const CardWrapper = styled.div`
