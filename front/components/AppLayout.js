@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
-import LoginForm from './LoginForm';
-import UserProfile from '../components/UserProfile';
+import LoginForm from '../containers/LoginForm';
+import UserProfile from '../containers/UserProfile';
 import Router from 'next/router'; 
 import { Menu, Input, Row, Col } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
