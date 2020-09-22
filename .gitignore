@@ -2,6 +2,7 @@
 front/node_modules
 front/.next
 front/.env
+front/bundles
 
 #back
 back/node_modules
