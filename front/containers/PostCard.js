@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, memo } from 'react';
+import React, { useState, useCallback, useEffect, memo, useRef } from 'react';
 import { Card, Icon, Button, Avatar, List, Form, Input, Comment, Popover} from 'antd';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
@@ -7,6 +7,7 @@ import { ADD_COMMENT_REQUEST, LOAD_COMMENTS_REQUEST, UNLIKE_POST_REQUEST, LIKE_P
 import { FOLLOW_USER_REQUEST, UNFOLLOW_USER_REQUEST } from '../reducers/user';
 import PostImages from '../components/PostImages';
 import PostCardContent from '../components/PostCardContent';
+import FollowButton from '../components/FollowButton';
 import CommentForm from '../containers/CommentForm';
 import styled from 'styled-components';
 import moment from 'moment';
@@ -18,10 +19,10 @@ const CardWrapper = styled.div`
 
 const PostCard = memo(({ post }) => {
     const [ commentFormOpened, setCommentFormOpened ] = useState(false);
-    const { me } = useSelector(state => state.user); 
+    const id = useSelector(state => state.user.me && state.user.me.id); //state에서 어떤 부분을 꺼낼지 결정함.
     const dispatch = useDispatch();
 
-    const liked = me && post.Likers && post.Likers.find(v => v.id === me.id);
+    const liked = id && post.Likers && post.Likers.find(v => v.id === id);
 
     const onToggleComment = useCallback(() => {
         setCommentFormOpened(prev => !prev);
@@ -33,8 +34,18 @@ const PostCard = memo(({ post }) => {
         }
     }, []);
 
+    //리렌더링 문제 해결을 위해 post값 비교
+    // const postMemory = useRef(id);
+
+    // console.log('post', id);
+
+    // useEffect(() => {
+    //     console.log('post useEffect', postMemory.current, id, postMemory.current === id); //처음 post 값이랑 달라진 포스트와 비교.
+    // });
+
+
     const onToggleLike = useCallback(() => {
-        if (!me) {
+        if (!id) {
             return alert('로그인이 필요합니다!');
         }
 
@@ -51,17 +62,17 @@ const PostCard = memo(({ post }) => {
             });
         }
         
-    }, [me && me.id, post && post.id, liked]);
+    }, [id, post && post.id, liked]);
 
     const onRetweet = useCallback(() => {
-        if ( !me ) {
+        if ( !id ) {
             return alert('로그인이 필요합니다.');
         }
         return dispatch({
             type: RETWEET_REQUEST,
             data: post.id,
         })
-    }, [me && me.id, post && post.id]);
+    }, [id, post && post.id]);
 
     const onFollow = useCallback(userId => () => {
         dispatch({
@@ -95,7 +106,7 @@ const PostCard = memo(({ post }) => {
                     key="ellipsis"
                     content={(
                         <Button.Group>
-                            {me && post.UserId === me.id
+                            {id && post.UserId === id
                             ? (
                                 <>
                                     <Button>수정</Button>
@@ -110,13 +121,7 @@ const PostCard = memo(({ post }) => {
                 </Popover>,
             ]}
             title={post.RetweetId ? `${post.User.nickname}님이 리트윗하셨습니다.` : null}
-            extra={
-                !me || post.User.id === me.id //로그인 안했을 때, 자신의 게시글일 때 follow, unfollow 버튼 안뜸
-                ? null
-                : me.Followings && me.Followings.find(v => v.id === post.User.id) //내 팔로잉 목록에 작성자의 id가 존재한다면 팔로우 취소버튼 필요
-                    ? <Button onClick={onUnfollow(post.User.id)}>언팔로우</Button>
-                    : <Button onClick={onFollow(post.User.id)}>팔로우</Button>
-            }
+            extra={<FollowButton post={post} onUnfollow={onUnfollow} onFollow={onFollow} />}
         >
             {/* 리트윗을 한 게시물인지 아닌지를 구별하여 postCard를 보여줌 그리고 구별을 하면서 중복되던 코드는 PostCardContent 컴포넌트로 분리시켜서 중복을 제거해줌.  */}
             {/* 리트윗 객체안에 리트윗한 내용이 들어 있음. */}
