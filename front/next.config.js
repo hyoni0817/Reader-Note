@@ -1,22 +1,12 @@
-const withBundleAnalyzer = require('@zeit/next-bundle-analyzer');
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+    enabled: process.env.ANALYZE === 'true',
+});
 const webpack = require('webpack');
 const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = withBundleAnalyzer({
     //여기에 설정들을 다 넣을 수 있다.
     distDir: '.next',
-    analyzeServer: ["server", "both"].includes(process.env.BUNDLE_ANALYZE),
-    analyzeBrowser: ["browser", "both"].includes(process.env.BUNDLE_ANALYZE),
-    bundleAnalyzerConfig: {
-        server: {
-        analyzerMode: 'static',
-        reportFilename: '../bundles/server.html'
-        },
-        browser: {
-        analyzerMode: 'static',
-        reportFilename: '../bundles/client.html'
-        }
-    },
     webpack(config) { //config안에 기본적인 next 설정이 들어있다. 
         console.log('config', config); //기본적인 next 설정이 console로 나옴. 
         console.log('rules', config.module.rules[0]);
