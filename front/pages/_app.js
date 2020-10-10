@@ -35,6 +35,8 @@ const ReaderNote = ({ Component, store, pageProps }) => {
                         name: 'og:description', content: '책을 좋아하는 사람들 Reader Note',
                     }, {
                         property: 'og:type', content: 'website',
+                    },  {
+                        property: 'og:image', content: 'http://localhost:3060/favicon.ico'
                     }]}
                     // 이게 app.js이기 때문에 여기에 넣는 Helmet은 모든 페이지에 공통된 head태그들을 넣은 것이다.
                     link={[{
