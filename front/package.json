@@ -7,7 +7,7 @@
     "dev": "nodemon",
     "build": "cross-env ANALYZE=true next build",
     "prestart": "npm run build",
-    "start": "cross-env NODE_ENV=production next start -p 3060"
+    "start": "cross-env NODE_ENV=production PORT=80 pm2 start server"
   },
   "author": "hyoni0817",
   "license": "MIT",
