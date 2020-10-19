@@ -94,13 +94,13 @@ const reducer = (state = initialState, action) => {
                 break;
             }
             case LOG_IN_SUCCESS: {
-                draft.isLogginIn = false;
+                draft.isLoggingIn = false;
                 draft.isLoading = false;
                 draft.me = action.data;
                 break;
             }
             case LOG_IN_FAILURE: {
-                draft.isLogginIn = false;
+                draft.isLoggingIn = false;
                 draft.logInErrorReason = action.error;
                 draft.me = null;
                 break;
