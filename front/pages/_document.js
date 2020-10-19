@@ -34,6 +34,9 @@ class MyDocument extends Document {
                 <body {...bodyAttrs}>
                     {/* Main이 app.js가 될 것이다. */}
                     <Main /> 
+                    {/* ie 에서의 실행을 위해 폴리필 사용 */}
+                    {process.env.NODE_ENV === 'production'
+                    && <script src="https://polyfill.io/v3/polyfill.min.js?features=es6,es7,es8,es9,NodeList.prototype.forEach&flags=gated" />}
                     {/* Next 구동에 필요한 script를 모아둔 것 */}
                     <NextScript />
                 </body>
