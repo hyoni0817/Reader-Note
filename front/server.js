@@ -50,6 +50,6 @@ app.prepare().then(() => {
     });
 
     server.listen(prod ? process.env.PORT : 3060, () => {
-        console.log('next+express running on port 3060');
+        console.log(`server is running on ${process.env.PORT}`);
     });
 })
