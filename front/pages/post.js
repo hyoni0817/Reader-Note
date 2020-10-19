@@ -19,7 +19,8 @@ const Post =  ({ id }) => {
                 }, {
                     property: 'og:description', content: singlePost.content,
                 }, {
-                    property: 'og:image', content: singlePost.Images[0] && `http://localhost:3065/${singlePost.Images[0].src}`, 
+                    property: 'og:image', content: singlePost.Images[0] && `http://localhost:3065/${singlePost.Images[0].src}`,
+                    //첫번째 이미지를 썸네일로 보여주거나 이미지가 없을 때는 기본 이미지 보여주기(기본이미지는 favicon 사용) 
                 }, {
                     property: 'og:url', content: `http://localhost:3065/post/${id}`,
                 }]}
